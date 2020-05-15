@@ -16,7 +16,13 @@ public class Player : MonoBehaviour
     private float _playerSpeedIncr = 0.90f;
     [SerializeField]
     private float _playerSpeedDecr = 0.90f;
-    
+    [SerializeField]
+    private float _playerJumpForce = 5f;
+
+
+    [Header("Bools")]
+    [SerializeField]
+    private bool _CanJump = true;
 
 
     private Rigidbody rb;
@@ -103,6 +109,13 @@ public class Player : MonoBehaviour
             }
         }
 
+        // Jump
+
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) /*&& _CanJump == true*/)
+        {
+            Debug.Log("jump");
+            rb.velocity = new Vector3 (0f, _playerJumpForce, 0f);
+        }
 
     }
 
