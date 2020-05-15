@@ -11,15 +11,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _playerMaxSpeed = 20f;
     [SerializeField]
+    private float _playerMinSpeed = 5f;
+    [SerializeField]
     private float _playerSpeedIncr = 0.90f;
     [SerializeField]
     private float _playerSpeedDecr = 0.90f;
-    [SerializeField]
-    private float _stopLimite = 5f;
-
+    
 
 
     private Rigidbody rb;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -31,59 +32,86 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontalMovement = Input.GetAxis("Horizontal");
-        float verticalMovement = Input.GetAxis("Vertical");
+        float horizontalMovement = Input.GetAxisRaw("Horizontal");
+        float verticalMovement = Input.GetAxisRaw("Vertical");
+        Debug.Log(horizontalMovement);
+        Debug.Log(verticalMovement);
+
+        rb.MovePosition(rb.position + new Vector3(horizontalMovement* _playerSpeed, 0f, verticalMovement* _playerSpeed) * Time.deltaTime);
 
 
-        if (horizontalMovement > 0 || verticalMovement >0)
+        // speed Incr
+        if (horizontalMovement > 0)
         {
-            if (_playerSpeed < 0) _playerSpeed = 0;
-
-            if (Mathf.Abs(_playerSpeed) < _playerMaxSpeed)
+            if (_playerSpeed < _playerMaxSpeed)
             {
                 _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
-                if (Mathf.Abs(_playerSpeed) > _playerMaxSpeed)
+                if (_playerSpeed > _playerMaxSpeed)
                 {
                     _playerSpeed = _playerMaxSpeed;
                 }
             }
 
         }
-        else if (horizontalMovement < 0 || verticalMovement < 0)
+
+        if (horizontalMovement < 0)
         {
-            if (_playerSpeed > 0) _playerSpeed = 0;
-
-
-            if (Mathf.Abs(_playerSpeed) < _playerMaxSpeed)
+            if (_playerSpeed < _playerMaxSpeed)
             {
-                _playerSpeed -= (Time.deltaTime * _playerSpeedIncr);
-                if (Mathf.Abs(_playerSpeed) > _playerMaxSpeed)
+                _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
+                if (_playerSpeed > _playerMaxSpeed)
                 {
-                    _playerSpeed = -_playerMaxSpeed;
+                    _playerSpeed = _playerMaxSpeed;
+                }
+            }
+
+        }
+        
+
+        if (verticalMovement < 0)
+        {
+            if (_playerSpeed < _playerMaxSpeed)
+            {
+                _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
+                if (_playerSpeed > _playerMaxSpeed)
+                {
+                    _playerSpeed = _playerMaxSpeed;
+                }
+            }
+
+        }
+
+        if (verticalMovement > 0)
+        {
+            if (_playerSpeed < _playerMaxSpeed)
+            {
+                _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
+                if (_playerSpeed > _playerMaxSpeed)
+                {
+                    _playerSpeed = _playerMaxSpeed;
                 }
             }
 
         }
         // speed decrease
-        else
+        if (horizontalMovement == 0 && verticalMovement == 0)
         {
             _playerSpeed *= _playerSpeedDecr;   // speedDecr entre 0 et 1
-            if (Mathf.Abs(_playerSpeed) < _stopLimite)
+            if (_playerSpeed < _playerMinSpeed)
             {
-                _playerSpeed = 0;
+                _playerSpeed = _playerMinSpeed;
             }
         }
+
+
     }
 
 
     private void FixedUpdate()
     {
-        PlayerMove();
+
     }
 
 
-    private void PlayerMove() 
-    {
-        rb.MovePosition(transform.position + new Vector3(_playerSpeed, 0, 0) * Time.deltaTime);
-    }
 }
+

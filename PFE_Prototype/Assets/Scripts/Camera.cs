@@ -15,12 +15,8 @@ public class Camera : MonoBehaviour
     public float verticalOffset = 1.0f;
     public float horizontalOffset = 2.0f;
 
-    [Range(-90.0f, 90.0f)]
-    public float verticalAngle = 0.0f;
-    [Range(-90.0f, 90.0f)]
-    public float horizontalAngle = 0.0f;
-
-    public Quaternion rotationCamera;
+   
+    public Vector3 rotationCamera;
 
     // Update is called once per frame
     void Update()
@@ -30,6 +26,6 @@ public class Camera : MonoBehaviour
         Vector3 dist = Vector3.forward * -distance;
 
         transform.position = targetFocus.position + dist + vOffset + hOffset;
-        transform.rotation = rotationCamera;
+        transform.rotation = Quaternion.Euler(rotationCamera);
     }
 }

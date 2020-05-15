@@ -230,8 +230,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!114 &132484150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,11 +244,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a569b3cc007790840bf16902e63c414b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerSpeed: 1
+  _playerSpeed: 5
   _playerMaxSpeed: 20
+  _playerMinSpeed: 5
   _playerSpeedIncr: 1
-  _playerSpeedDecr: 1
-  _stopLimite: 5
+  _playerSpeedDecr: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,9 +605,7 @@ MonoBehaviour:
   distance: 5
   verticalOffset: 1
   horizontalOffset: 2
-  verticalAngle: -0
-  horizontalAngle: 0
-  rotationCamera: {x: 0, y: 0, z: 0, w: 0}
+  rotationCamera: {x: 0, y: 0, z: 0}
 --- !u!1 &979523228
 GameObject:
   m_ObjectHideFlags: 0
