@@ -281,13 +281,13 @@ void Attack ()
             enemy.Knockback(50);
         }
     } 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackPoint.position, _attackRange);
         Gizmos.DrawWireCube(bearAttackPoint.position, _bearAttackRange);
         
         
-    }
-
+    }*/
+    
 }
 
