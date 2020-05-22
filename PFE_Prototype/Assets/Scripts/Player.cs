@@ -281,15 +281,13 @@ void Attack ()
             enemy.Knockback(50);
         }
     } 
-   /* private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
-        Gizmos.matrix = Matrix4x4.TRS(Vector3.zero,render.transform.rotation, Vector3.one);
         Gizmos.DrawWireSphere(attackPoint.position, _attackRange);
         Gizmos.DrawWireCube(bearAttackPoint.position, _bearAttackRange);
-        //Gizmos.DrawSphere(transform.position, 10);
-        //Handles.DrawCube(0, bearAttackPoint.position, Quaternion.Euler(0, 45, 0), _bearAttackRange);
         
-    }*/
+        
+    }
 
 }
 
