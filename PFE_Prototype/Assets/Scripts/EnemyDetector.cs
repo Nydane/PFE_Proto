@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyDetector : MonoBehaviour
 {
     public static List<Enemy> EnemiesDetected = new List<Enemy>();

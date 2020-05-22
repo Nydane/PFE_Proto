@@ -220,7 +220,6 @@ void Attack ()
     void BearAttack()
     {
 
-        Vector3 newPlayerDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
         Collider[] hitEnemies = Physics.OverlapBox(bearAttackPoint.position, _bearAttackRange,render.transform.rotation, enemyLayer);
 
