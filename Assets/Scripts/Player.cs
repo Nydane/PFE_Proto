@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
     public static Player playerInstance;
@@ -31,11 +32,14 @@ public class Player : MonoBehaviour
     [Header("Bools")]
     [SerializeField]
     private bool _CanJump = true;
+    [SerializeField]
+    private bool _CanEagleAttack = true;
 
 
     [Header("PlayerInfo")]
     public Rigidbody rb;
     public GameObject render;
+    public Animator animator;
 
     [Header("Attack")]
     public Transform attackPoint;
@@ -45,7 +49,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Vector3 _bearAttackRange;
     public LayerMask enemyLayer;
-
+    public float attackResetTimer = 2f;
+    public float eagleTime = 0f;
+    public int attackNum = 0;
 
     // Raycast Variables
     Ray downRay;
@@ -61,6 +67,7 @@ public class Player : MonoBehaviour
     void Update()
     {
 
+        
 
         // Reset jump with Raycast
         downRay = new Ray(_downObject.transform.position, Vector3.down * _rayLength);
@@ -80,8 +87,8 @@ public class Player : MonoBehaviour
         // Identification des mouvements
         float horizontalMovement = Input.GetAxisRaw("Horizontal");
         float verticalMovement = Input.GetAxisRaw("Vertical");
-        Debug.Log(horizontalMovement);
-        Debug.Log(verticalMovement);
+        //Debug.Log(horizontalMovement);
+        //Debug.Log(verticalMovement);
 
         // ce qui fait bouger le personnages
         rb.MovePosition(rb.position + new Vector3(horizontalMovement* _playerSpeed, 0f, verticalMovement* _playerSpeed) * Time.deltaTime);
@@ -185,15 +192,50 @@ public class Player : MonoBehaviour
 
 
         // Simple Attack
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+       /* if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
             Attack();
-        }
+        }*/
 
-        //Bear Attack
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        {
+            
+            
+            //eagleTime += Time.deltaTime * attackResetTimer;
+
+
+            if (_CanEagleAttack == true && attackNum == 0)
+            {
+                
+                StartCoroutine("EagleAttack1");
+                StartCoroutine("ResetTime");
+                attackNum += 1;
+                Debug.Log("Eagle1");
+            }
+
+            if (_CanEagleAttack == true && attackNum == 1)
+            {
+
+                StopCoroutine("ResetTime");
+                StartCoroutine("EagleAttack2");
+                StartCoroutine("ResetTime");
+                attackNum += 1;
+                Debug.Log("Eagle2");
+            }
+            if (_CanEagleAttack == true && attackNum == 2)
+            {
+                    StartCoroutine("EagleAttack3");
+                    attackNum = 0;
+                    Debug.Log("Eagle3");
+            }
+  
+        }
+        
+
+        //grizzly Attack
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
-            BearAttack();
+            GrizzlyAttack();
         }
 
         //TigerAttack
@@ -205,18 +247,26 @@ public class Player : MonoBehaviour
 
 void Attack ()
     {
-       Collider[] hitEnemies =  Physics.OverlapSphere(attackPoint.position, _attackRange, enemyLayer);
+        /* Collider[] hitEnemies =  Physics.OverlapSphere(attackPoint.position, _attackRange, enemyLayer);
 
-        foreach (Collider enemy in hitEnemies)
+          foreach (Collider enemy in hitEnemies)
+          {
+              Debug.Log("You hit Enemies");
+              enemy.GetComponent<Enemy>().TakeDamamge(20);
+              enemy.GetComponent<Enemy>().Knockback(50);
+
+          }*/
+
+        foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
-            enemy.GetComponent<Enemy>().TakeDamamge(20);
-            enemy.GetComponent<Enemy>().Knockback(50);
+            enemy.TakeDamamge(20);
+            enemy.GetComponent<Enemy>().Knockback(100);
 
         }
     }
 
-
+    // même attaque que le grizzly mais faites d'une seconde façon
     void BearAttack()
     {
 
@@ -234,7 +284,7 @@ void Attack ()
 
     void GrizzlyAttack()
     {
-        foreach (Enemy enemy in EnemyDetector.EnemiesDetected)
+        foreach (Enemy enemy in EnemyDetectorRectangle.EnemiesDetectedRectangle)
         {
             Debug.Log("You hit Enemies");
             enemy.TakeDamamge(40);
@@ -246,7 +296,7 @@ void Attack ()
 
     IEnumerator TigerAttack()
     {
-        int l = EnemyDetector.EnemiesDetected.Count;
+        int l = EnemyDetectorRectangle.EnemiesDetectedRectangle.Count;
        /* foreach (Enemy enemy in Detector.EnemiesDetected)
         {
             Debug.Log("You hit Enemies");
@@ -257,7 +307,7 @@ void Attack ()
 
         for (int i = l - 1; i >= 0; i--)
         {
-            Enemy enemy = EnemyDetector.EnemiesDetected[i];
+            Enemy enemy = EnemyDetectorRectangle.EnemiesDetectedRectangle[i];
             Debug.Log("You hit Enemies");
             enemy.TakeDamamge(20);
             enemy.Knockback(50);
@@ -272,10 +322,10 @@ void Attack ()
             enemy.Knockback(50);
 
         }*/
-        l = EnemyDetector.EnemiesDetected.Count;
+        l = EnemyDetectorRectangle.EnemiesDetectedRectangle.Count;
         for (int i= l-1; i >=0 ; i--)
         {
-            Enemy enemy = EnemyDetector.EnemiesDetected[i];
+            Enemy enemy = EnemyDetectorRectangle.EnemiesDetectedRectangle[i];
             Debug.Log("You hit Enemies");
             enemy.TakeDamamge(20);
             enemy.Knockback(50);
@@ -288,6 +338,72 @@ void Attack ()
         
         
     }*/
-    
+
+    IEnumerator EagleAttack1()
+    {
+        _CanEagleAttack = false;
+        animator.SetBool("EagleAttackDone", false);
+        foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
+        {
+            Debug.Log("You hit Enemies");
+            
+            enemy.TakeDamamge(10);
+            enemy.GetComponent<Enemy>().Knockback(100);
+
+        }
+        yield return new WaitForSeconds(0.2f);//animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+        
+        _CanEagleAttack = true;
+        animator.SetBool("EagleAttackDone", true);
+
+
+    }
+
+    IEnumerator EagleAttack2()
+    {
+        _CanEagleAttack = false;
+        foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
+        {
+            Debug.Log("You hit Enemies");
+            enemy.TakeDamamge(30);
+            enemy.GetComponent<Enemy>().Knockback(100);
+
+        }
+        yield return new WaitForSeconds(0.2f);
+        _CanEagleAttack = true;
+    }
+
+    IEnumerator EagleAttack3()
+    {
+        _CanEagleAttack = false;
+        foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
+        {
+            Debug.Log("You hit Enemies");
+            enemy.TakeDamamge(60);
+            enemy.GetComponent<Enemy>().Knockback(100);
+
+        }
+        yield return new WaitForSeconds(0.2f);
+        _CanEagleAttack = true;
+    }
+
+    IEnumerator ResetTime()
+    {
+        eagleTime = 0f;
+        while (eagleTime < attackResetTimer)
+        {
+            eagleTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+            Debug.Log(eagleTime);
+
+        }
+
+        if (eagleTime >= 1)
+        {
+            attackNum = 0;
+            eagleTime = 0f;
+            Debug.Log("EagleReset");
+        }
+    }
 }
 

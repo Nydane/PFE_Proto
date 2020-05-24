@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class EnemyDetector : MonoBehaviour
+public class EnemyDetectorRectangle : MonoBehaviour
 {
-    public static List<Enemy> EnemiesDetected = new List<Enemy>();
+    public static List<Enemy> EnemiesDetectedRectangle = new List<Enemy>();
     
 
     public void OnTriggerEnter(Collider other)
@@ -13,7 +13,7 @@ public class EnemyDetector : MonoBehaviour
         Enemy e = other.GetComponent<Enemy>();
         if (e != null)
         {
-            EnemiesDetected.Add(e);
+            EnemiesDetectedRectangle.Add(e);
         }
     }
 
@@ -22,7 +22,7 @@ public class EnemyDetector : MonoBehaviour
         Enemy e = other.GetComponent<Enemy>();
         if (e != null)
         {
-            EnemiesDetected.Remove(e);
+            EnemiesDetectedRectangle.Remove(e);
         }
     }
 }

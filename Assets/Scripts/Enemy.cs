@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         Debug.Log("You killed an enemy");
-        EnemyDetector.EnemiesDetected.Remove(this);
+        EnemyDetectorRectangle.EnemiesDetectedRectangle.Remove(this);
         gameObject.SetActive(false);
     }
 
