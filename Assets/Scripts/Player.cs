@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
         
 
         // Reset jump with Raycast
-        downRay = new Ray(_downObject.transform.position, Vector3.down * _rayLength);
+       /* downRay = new Ray(_downObject.transform.position, Vector3.down * _rayLength);
         Debug.DrawRay(_downObject.transform.position, Vector3.down * _rayLength);
 
         if (Physics.Raycast(downRay, out RaycastHit groundInfo, _rayLength))
@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
                 _CanJump = true;
             }
          
-        }
+        }*/
 
         
         // Identification des mouvements
@@ -252,7 +252,8 @@ public class Player : MonoBehaviour
         }
     }
 
-void Attack ()
+    
+    void Attack ()
     {
         /* Collider[] hitEnemies =  Physics.OverlapSphere(attackPoint.position, _attackRange, enemyLayer);
 
@@ -443,6 +444,14 @@ void Attack ()
             attackNum = 0;
             eagleTime = 0f;
             Debug.Log("EagleReset");
+        }
+    }
+    // reset jump
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            _CanJump = true;
         }
     }
 }
