@@ -205,26 +205,35 @@ public class Player : MonoBehaviour
             if (_CanEagleAttack == true && attackNum == 0)
             {
                 
-                StartCoroutine("EagleAttack1");
+                //StartCoroutine("EagleAttack1");
+                StartCoroutine("EagleAnime1");
                 StartCoroutine("ResetTime");
                 attackNum += 1;
                 Debug.Log("Eagle1");
+                
+
             }
 
             if (_CanEagleAttack == true && attackNum == 1)
             {
-
+                
                 StopCoroutine("ResetTime");
-                StartCoroutine("EagleAttack2");
+                //StartCoroutine("EagleAttack2");
+                StartCoroutine("EagleAnime2");
                 StartCoroutine("ResetTime");
                 attackNum += 1;
                 Debug.Log("Eagle2");
+                
+
             }
             if (_CanEagleAttack == true && attackNum == 2)
             {
-                    StartCoroutine("EagleAttack3");
-                    attackNum = 0;
-                    Debug.Log("Eagle3");
+
+                //StartCoroutine("EagleAttack3");
+                StartCoroutine("EagleAnime3");
+                attackNum = 0;
+                Debug.Log("Eagle3");
+                
             }
   
         }
@@ -337,29 +346,38 @@ void Attack ()
         
     }*/
 
-    IEnumerator EagleAttack1()
+    void EagleAttack1()
     {
-        _CanEagleAttack = false;
-        animator.SetBool("EagleAttackDone", false);
+        //_CanEagleAttack = false;
+        //animator.SetBool("EagleAttackDone1", false);
         foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
-            
             enemy.TakeDamamge(10);
             enemy.GetComponent<Enemy>().Knockback(100);
 
         }
-        yield return new WaitForSeconds(0.2f);//animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+        //yield return new WaitForSeconds(0.2f);//animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
         
-        _CanEagleAttack = true;
-        animator.SetBool("EagleAttackDone", true);
-
+        //_CanEagleAttack = true;
+        //animator.SetBool("EagleAttackDone1", true);
 
     }
 
-    IEnumerator EagleAttack2()
+    IEnumerator EagleAnime1()
     {
         _CanEagleAttack = false;
+        animator.SetBool("EagleAttackDone1", false);
+        yield return new WaitForSeconds(0.2f);
+        _CanEagleAttack = true;
+        
+        animator.SetBool("EagleAttackDone1", true);
+    }
+
+    void EagleAttack2()
+    {
+        //_CanEagleAttack = false;
+        //animator.SetBool("EagleAttackDone2", false);
         foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
@@ -367,13 +385,26 @@ void Attack ()
             enemy.GetComponent<Enemy>().Knockback(100);
 
         }
-        yield return new WaitForSeconds(0.2f);
-        _CanEagleAttack = true;
+       // yield return new WaitForSeconds(0.2f);
+       // _CanEagleAttack = true;
+       // animator.SetBool("EagleAttackDone2", true);
     }
 
-    IEnumerator EagleAttack3()
+    IEnumerator EagleAnime2()
     {
         _CanEagleAttack = false;
+        animator.SetBool("EagleAttackDone2", false);
+        yield return new WaitForSeconds(0.2f);
+        _CanEagleAttack = true;
+        
+        animator.SetBool("EagleAttackDone2", true);
+    }
+
+
+    void EagleAttack3()
+    {
+       //_CanEagleAttack = false;
+        //animator.SetBool("EagleAttackDone3", false);
         foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
@@ -381,8 +412,19 @@ void Attack ()
             enemy.GetComponent<Enemy>().Knockback(100);
 
         }
+        //yield return new WaitForSeconds(0.2f);
+        //_CanEagleAttack = true;
+       // animator.SetBool("EagleAttackDone3", true);
+    }
+
+    IEnumerator EagleAnime3()
+    {
+        _CanEagleAttack = false;
+        animator.SetBool("EagleAttackDone3", false);
         yield return new WaitForSeconds(0.2f);
         _CanEagleAttack = true;
+        
+        animator.SetBool("EagleAttackDone3", true);
     }
 
     IEnumerator ResetTime()
