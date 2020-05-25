@@ -192,18 +192,16 @@ public class Player : MonoBehaviour
 
 
         // Simple Attack
-       /* if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-        {
-            Attack();
-        }*/
+         /*if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+         {
+             animator.SetBool("EagleAttackDone", false);
+             Attack();
+         }*/
 
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
+                       
             
-            
-            //eagleTime += Time.deltaTime * attackResetTimer;
-
-
             if (_CanEagleAttack == true && attackNum == 0)
             {
                 
