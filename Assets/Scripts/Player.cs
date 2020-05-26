@@ -19,8 +19,10 @@ public class Player : MonoBehaviour
     private float _playerSpeedIncr = 0.90f;
     [SerializeField]
     private float _playerSpeedDecr = 0.90f;
-    [SerializeField]
-    private float _playerJumpForce = 5f;
+   // [SerializeField]
+   // private float _playerJumpForce = 5f;
+    //[SerializeField]
+   // private float _jumpTimer = 0.35f;
 
 
     [Header("Raycast")]
@@ -31,10 +33,9 @@ public class Player : MonoBehaviour
 
     [Header("Bools")]
     [SerializeField]
-    private bool _CanJump = true;
-    [SerializeField]
     private bool _CanEagleAttack = true;
-
+    [SerializeField]
+   // private bool _CanJump = true;
 
     [Header("PlayerInfo")]
     public Rigidbody rb;
@@ -182,21 +183,24 @@ public class Player : MonoBehaviour
 
         // Jump
 
-        if (Input.GetKeyDown(KeyCode.JoystickButton0) && _CanJump == true)
+        /*if (Input.GetKeyDown(KeyCode.JoystickButton0) && _CanJump == true)
         {
-            Debug.Log("jump");
-            rb.velocity = new Vector3 (0f, _playerJumpForce, 0f);
-            _CanJump = false;
+            
+            
+                Debug.Log("jump");
+                rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
+                _CanJump = false;
+                
+            
+        }*/
 
-        }
-
-
+       
         // Simple Attack
-         /*if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-         {
-             animator.SetBool("EagleAttackDone", false);
-             Attack();
-         }*/
+        /*if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        {
+            animator.SetBool("EagleAttackDone", false);
+            Attack();
+        }*/
 
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
@@ -447,12 +451,13 @@ public class Player : MonoBehaviour
         }
     }
     // reset jump
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
             _CanJump = true;
+            
         }
-    }
+    }*/
 }
 
