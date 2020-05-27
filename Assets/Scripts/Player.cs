@@ -19,10 +19,12 @@ public class Player : MonoBehaviour
     private float _playerSpeedIncr = 0.90f;
     [SerializeField]
     private float _playerSpeedDecr = 0.90f;
-   // [SerializeField]
-   // private float _playerJumpForce = 5f;
+    [SerializeField]
+    private float _airControlRatio = 0.5f;
+    // [SerializeField]
+    // private float _playerJumpForce = 5f;
     //[SerializeField]
-   // private float _jumpTimer = 0.35f;
+    // private float _jumpTimer = 0.35f;
 
 
     [Header("Raycast")]
@@ -54,8 +56,11 @@ public class Player : MonoBehaviour
     public float eagleTime = 0f;
     public int attackNum = 0;
 
-    // Raycast Variables
-    Ray downRay;
+    public Vector3 moveVector;
+    public Vector3 moveVectorJump;
+
+    
+    
 
     // Start is called before the first frame update
     void Start()
@@ -69,21 +74,6 @@ public class Player : MonoBehaviour
     {
 
         
-
-        // Reset jump with Raycast
-       /* downRay = new Ray(_downObject.transform.position, Vector3.down * _rayLength);
-        Debug.DrawRay(_downObject.transform.position, Vector3.down * _rayLength);
-
-        if (Physics.Raycast(downRay, out RaycastHit groundInfo, _rayLength))
-        {
-            Debug.Log(groundInfo.collider.tag);
-            if ( groundInfo.collider.tag == "Ground")
-            {
-                _CanJump = true;
-            }
-         
-        }*/
-
         
         // Identification des mouvements
         float horizontalMovement = Input.GetAxisRaw("Horizontal");
@@ -91,9 +81,21 @@ public class Player : MonoBehaviour
         //Debug.Log(horizontalMovement);
         //Debug.Log(verticalMovement);
 
-        // ce qui fait bouger le personnages
-        rb.MovePosition(rb.position + new Vector3(horizontalMovement* _playerSpeed, 0f, verticalMovement* _playerSpeed) * Time.deltaTime);
+        moveVector = new Vector3(horizontalMovement, 0f, verticalMovement);
 
+        if (BetterJump.isJumping)
+        {
+            rb.MovePosition(rb.position + (moveVectorJump * _playerSpeed )  * Time.deltaTime);
+            moveVectorJump += moveVector * _airControlRatio * Time.deltaTime;
+            moveVectorJump = Vector3.ClampMagnitude(moveVectorJump, 1f);
+        }
+        else
+        {
+            // ce qui fait bouger le personnages
+            rb.MovePosition(rb.position + moveVector *_playerSpeed* Time.deltaTime);
+        }
+        
+        
         //direction du personnage : on fait rotate le render et non le player en tant que tel
 
         Vector3 playerDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
@@ -181,26 +183,9 @@ public class Player : MonoBehaviour
             }
         }
 
-        // Jump
-
-        /*if (Input.GetKeyDown(KeyCode.JoystickButton0) && _CanJump == true)
-        {
-            
-            
-                Debug.Log("jump");
-                rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
-                _CanJump = false;
-                
-            
-        }*/
-
+        
        
-        // Simple Attack
-        /*if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-        {
-            animator.SetBool("EagleAttackDone", false);
-            Attack();
-        }*/
+        
 
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
@@ -209,7 +194,7 @@ public class Player : MonoBehaviour
             if (_CanEagleAttack == true && attackNum == 0)
             {
                 
-                //StartCoroutine("EagleAttack1");
+                
                 StartCoroutine("EagleAnime1");
                 StartCoroutine("ResetTime");
                 attackNum += 1;
@@ -222,7 +207,7 @@ public class Player : MonoBehaviour
             {
                 
                 StopCoroutine("ResetTime");
-                //StartCoroutine("EagleAttack2");
+                
                 StartCoroutine("EagleAnime2");
                 StartCoroutine("ResetTime");
                 attackNum += 1;
@@ -353,8 +338,7 @@ public class Player : MonoBehaviour
 
     void EagleAttack1()
     {
-        //_CanEagleAttack = false;
-        //animator.SetBool("EagleAttackDone1", false);
+        
         foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
@@ -362,10 +346,7 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Enemy>().Knockback(100);
 
         }
-        //yield return new WaitForSeconds(0.2f);//animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
         
-        //_CanEagleAttack = true;
-        //animator.SetBool("EagleAttackDone1", true);
 
     }
 
@@ -381,8 +362,7 @@ public class Player : MonoBehaviour
 
     void EagleAttack2()
     {
-        //_CanEagleAttack = false;
-        //animator.SetBool("EagleAttackDone2", false);
+        
         foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
@@ -390,9 +370,7 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Enemy>().Knockback(100);
 
         }
-       // yield return new WaitForSeconds(0.2f);
-       // _CanEagleAttack = true;
-       // animator.SetBool("EagleAttackDone2", true);
+      
     }
 
     IEnumerator EagleAnime2()
@@ -408,8 +386,7 @@ public class Player : MonoBehaviour
 
     void EagleAttack3()
     {
-       //_CanEagleAttack = false;
-        //animator.SetBool("EagleAttackDone3", false);
+       
         foreach (Enemy enemy in EnemyDectectorSphere.EnemiesDetectedSphere)
         {
             Debug.Log("You hit Enemies");
@@ -417,9 +394,7 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Enemy>().Knockback(100);
 
         }
-        //yield return new WaitForSeconds(0.2f);
-        //_CanEagleAttack = true;
-       // animator.SetBool("EagleAttackDone3", true);
+       
     }
 
     IEnumerator EagleAnime3()
@@ -450,14 +425,6 @@ public class Player : MonoBehaviour
             Debug.Log("EagleReset");
         }
     }
-    // reset jump
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            _CanJump = true;
-            
-        }
-    }*/
+    
 }
 
