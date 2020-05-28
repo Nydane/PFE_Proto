@@ -12,7 +12,8 @@ public class BetterJump : MonoBehaviour
     [SerializeField]
     public float fallMultiplier= 2.5f;
     public float lowJumpMultiplier = 2f;
-
+    public float stopJumpTimer;
+    public float timeInTheAir;
     Rigidbody rb;
 
     private void Awake()
@@ -23,34 +24,47 @@ public class BetterJump : MonoBehaviour
 
     private void Update()
     {
-      
 
+        Debug.Log(Physics.gravity.y);
 
         if (Input.GetKeyDown(KeyCode.JoystickButton0) && _CanJump == true)
          {
+
             isJumping = true;
-             Player.playerInstance.moveVectorJump = Player.playerInstance.moveVector;
-             Debug.Log("jump");
-             rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
-             _CanJump = false;
+            Player.playerInstance.moveVectorJump = Player.playerInstance.moveVector;
+            Debug.Log("jump");
+            rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
+            _CanJump = false;
 
-       
+            
          }
 
-       
+        if (timeInTheAir >= stopJumpTimer)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
         
-         if (rb.velocity.y <0)
-         {
-             rb.velocity += Vector3.up * Physics.gravity.y* (fallMultiplier - 1) *Time.deltaTime;
 
-         }
-         else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.JoystickButton0))
-         {
-             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * (Time.deltaTime);
-         }
+        if (rb.velocity.y <0)
+        {
+             rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) *Time.deltaTime;
 
+        }
+        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.JoystickButton0))
+        {
+             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
 
-
+        if (isJumping)
+        {
+            isJumping = true;
+            timeInTheAir += Time.deltaTime;
+        }
+        else if (!isJumping)
+        {
+            timeInTheAir = 0;
+            isJumping = false;
+        }
     }
 
    

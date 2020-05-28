@@ -17,7 +17,7 @@ public class Camera : MonoBehaviour
     public Vector3 rotationCamera;
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         Vector3 vOffset = Vector3.up * _verticalOffset;
         Vector3 hOffset = Vector3.right * horizontalOffset;
