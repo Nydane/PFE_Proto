@@ -532,7 +532,7 @@ MonoBehaviour:
   _playerMinSpeed: 5
   _playerSpeedIncr: 50
   _playerSpeedDecr: 0
-  _airControlRatio: 0
+  _airControlRatio: 50
   _rayLength: 0.95
   _downObject: {fileID: 1595920988}
   _CanEagleAttack: 1
