@@ -21,23 +21,19 @@ public class Player : MonoBehaviour
     private float _playerSpeedDecr = 0.90f;
     [SerializeField]
     private float _airControlRatio = 0.5f;
-    // [SerializeField]
-    // private float _playerJumpForce = 5f;
-    //[SerializeField]
-    // private float _jumpTimer = 0.35f;
+    public Vector3 moveVector;
+    public Vector3 moveVectorJump;
 
-
-    [Header("Raycast")]
-    [SerializeField]
-    private float _rayLength = 5f;
-    [SerializeField]
-    private GameObject _downObject;
 
     [Header("Bools")]
     [SerializeField]
     private bool _CanEagleAttack = true;
     [SerializeField]
-   // private bool _CanJump = true;
+    private bool _canNewBearAttack = true;
+    [SerializeField]
+
+    private bool _canNewEagleAttack = true;
+
 
     [Header("PlayerInfo")]
     public Rigidbody rb;
@@ -56,9 +52,7 @@ public class Player : MonoBehaviour
     public float eagleTime = 0f;
     public int attackNum = 0;
 
-    public Vector3 moveVector;
-    public Vector3 moveVectorJump;
-
+    
     
     
 
@@ -186,7 +180,7 @@ public class Player : MonoBehaviour
         
        
         
-
+        // Eagle Attack
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
                        
@@ -228,16 +222,21 @@ public class Player : MonoBehaviour
         }
         
 
-        //grizzly Attack
+        //NewBear Attack
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
-            GrizzlyAttack();
+            if (_canNewBearAttack)
+            {
+                StartCoroutine("NewBearAttack");
+            }
+            //NewBearAttack();
+            
         }
 
-        //TigerAttack
+        //NewEagle Attack
         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
-            StartCoroutine(TigerAttack());
+            StartCoroutine("AnimNewEagleAttack");
         }
     }
 
@@ -383,7 +382,6 @@ public class Player : MonoBehaviour
         animator.SetBool("EagleAttackDone2", true);
     }
 
-
     void EagleAttack3()
     {
        
@@ -426,5 +424,46 @@ public class Player : MonoBehaviour
         }
     }
     
+    IEnumerator NewBearAttack()
+    {
+        int l = EnemyDetectorBear.EnemiesDetectedBear.Count;
+        _canNewBearAttack = false;
+        
+        for (int i = l - 1; i >= 0; i--)
+        {
+            Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
+            Debug.Log("NewBearAttack!");
+            enemy.TakeDamamge(50);
+            enemy.GetComponent<Enemy>().Knockback(200);
+
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        _canNewBearAttack = true;
+    }
+
+    void NewEagleAttack()
+    {
+        int l = EnemyDetectorEagle.EnemiesDetectedEagle.Count;
+
+        for (int i = l - 1; i >= 0; i--)
+        {
+            Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
+            Debug.Log("NewBearAttack!");
+            enemy.TakeDamamge(10);
+            enemy.GetComponent<Enemy>().Knockback(100);
+
+        }
+    }
+
+    IEnumerator AnimNewEagleAttack()
+    {
+        _canNewEagleAttack = false;
+        animator.SetBool("NewEagle", false);
+        yield return new WaitForSeconds(2f);
+        animator.SetBool("NewEagle", true);
+        _canNewEagleAttack = true;
+
+    }
 }
 

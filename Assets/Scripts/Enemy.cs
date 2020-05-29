@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         currentEnemyHealth = maxenemyHealth;
-        healthBar.SetMaxHealth(100);
+        healthBar.SetMaxHealth(currentEnemyHealth);
         rbEnemy = transform.GetComponent<Rigidbody>();
 
     }
