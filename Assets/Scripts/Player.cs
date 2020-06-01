@@ -25,9 +25,10 @@ public class Player : MonoBehaviour
     public float dashVelocity = 10f;
     public Vector3 moveVector;
     public Vector3 moveVectorJump;
+    public Vector3 playerDirection;
     private float horizontalMovement;
     private float verticalMovement;
-    
+    private Vector3 lastDir;
 
     [Header("Bools")]
     [SerializeField]
@@ -111,15 +112,54 @@ public class Player : MonoBehaviour
         
         
         //direction du personnage : on fait rotate le render et non le player en tant que tel
-
-        Vector3 playerDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-
+                
         if ((horizontalMovement != 0 || verticalMovement !=0) && _canRotate)
         {
-            render.transform.rotation = Quaternion.LookRotation(playerDirection);
+            render.transform.rotation = Quaternion.LookRotation(moveVector);
+
+            if (horizontalMovement < 0)
+            {
+                playerDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f).normalized;
+
+            }
+            if (horizontalMovement > 0)
+            {
+                playerDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f).normalized;
+
+            }
+            if (verticalMovement < 0)
+            {
+                playerDirection = new Vector3(0f, 0f, Input.GetAxis("Vertical")).normalized;
+
+            }
+            if (verticalMovement > 0)
+            {
+                playerDirection = new Vector3(0f, 0f, Input.GetAxis("Vertical")).normalized;
+
+            }
+
+            if (verticalMovement > 0 && horizontalMovement > 0)
+            {
+                playerDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+
+            }
+            if (verticalMovement > 0 && horizontalMovement < 0)
+            {
+                playerDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+
+            }
+            if (verticalMovement < 0 && horizontalMovement > 0)
+            {
+                playerDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+
+            }
+            if (verticalMovement < 0 && horizontalMovement < 0)
+            {
+                playerDirection = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+
+            }
         }
         
-       
 
         // speed Incr
         if (horizontalMovement > 0)
@@ -244,12 +284,12 @@ public class Player : MonoBehaviour
         //NewEagle Attack
         if (Input.GetKeyDown(KeyCode.Joystick1Button1)&&_canNewEagleAttack)
         {
-           
-            StartCoroutine("AnimNewEagleAttack");
+
+            StartCoroutine(NewEagleAttackRoutine());
         }
     }
 
-    
+    // Not use for now
     void Attack ()
     {
         /* Collider[] hitEnemies =  Physics.OverlapSphere(attackPoint.position, _attackRange, enemyLayer);
@@ -272,6 +312,7 @@ public class Player : MonoBehaviour
     }
 
     // même attaque que le grizzly mais faites d'une seconde façon
+    // Not use for now
     void BearAttack()
     {
 
@@ -285,8 +326,8 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Enemy>().Knockback(200);
         }
     }
-    
 
+    // Not use for now
     void GrizzlyAttack()
     {
         foreach (Enemy enemy in EnemyDetectorRectangle.EnemiesDetectedRectangle)
@@ -298,7 +339,7 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    // Not use for now
     IEnumerator TigerAttack()
     {
         int l = EnemyDetectorRectangle.EnemiesDetectedRectangle.Count;
@@ -335,15 +376,9 @@ public class Player : MonoBehaviour
             enemy.TakeDamamge(20);
             enemy.Knockback(50);
         }
-    } 
-    /*private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attackPoint.position, _attackRange);
-        Gizmos.DrawWireCube(bearAttackPoint.position, _bearAttackRange);
-        
-        
-    }*/
+    }
 
+    // Not use for now
     void EagleAttack1()
     {
         
@@ -357,7 +392,7 @@ public class Player : MonoBehaviour
         
 
     }
-
+    // Not use for now
     IEnumerator EagleAnime1()
     {
         _CanEagleAttack = false;
@@ -367,7 +402,7 @@ public class Player : MonoBehaviour
         
         animator.SetBool("EagleAttackDone1", true);
     }
-
+    // Not use for now
     void EagleAttack2()
     {
         
@@ -380,7 +415,7 @@ public class Player : MonoBehaviour
         }
       
     }
-
+    // Not use for now
     IEnumerator EagleAnime2()
     {
         _CanEagleAttack = false;
@@ -390,7 +425,7 @@ public class Player : MonoBehaviour
         
         animator.SetBool("EagleAttackDone2", true);
     }
-
+    // Not use for now
     void EagleAttack3()
     {
        
@@ -403,7 +438,7 @@ public class Player : MonoBehaviour
         }
        
     }
-
+    // Not use for now
     IEnumerator EagleAnime3()
     {
         _CanEagleAttack = false;
@@ -413,7 +448,7 @@ public class Player : MonoBehaviour
         
         animator.SetBool("EagleAttackDone3", true);
     }
-
+    // Not use for now
     IEnumerator ResetTime()
     {
         eagleTime = 0f;
@@ -457,7 +492,7 @@ public class Player : MonoBehaviour
 
 
     }
-
+    // Not use for now
     void NewEagleAttack()
     {
         int l = EnemyDetectorEagle.EnemiesDetectedEagle.Count;
@@ -471,7 +506,7 @@ public class Player : MonoBehaviour
 
         }
     }
-
+    // Not use for now
     IEnumerator AnimNewEagleAttack()
     {
         _canNewEagleAttack = false;
@@ -482,27 +517,61 @@ public class Player : MonoBehaviour
 
     }
 
+    IEnumerator NewEagleAttackRoutine()
+    {
+        int l = EnemyDetectorEagle.EnemiesDetectedEagle.Count;
+        _canNewEagleAttack = false;
+        for (int i = l - 1; i >= 0; i--)
+        {
+            Enemy enemy = EnemyDetectorEagle.EnemiesDetectedEagle[i];
+            Debug.Log("EagleAttack!");
+            enemy.TakeDamamge(10);
+            enemy.GetComponent<Enemy>().Knockback(100);
+
+        }
+        yield return new WaitForSeconds(2f);
+        _canNewEagleAttack = true;
+    }
 
     IEnumerator LynxAttack()
     {
         
-     _canLynxAttack = false;
-     
-     rb.velocity = new Vector3(horizontalMovement, 0f, verticalMovement) * dashVelocity;
+        _canLynxAttack = false;
+
+
+        Dash(10);
+        
+        
+    
+    
+        
 
      yield return new WaitForSeconds(0.4f);
-     _canLynxAttack = true;
-     int l = EnemyDetectorLynx.EnemiesDetectedLynx.Count;
-     for (int i = l - 1; i >= 0; i--)
-     {
-       Enemy enemy = EnemyDetectorLynx.EnemiesDetectedLynx[i];
-       Debug.Log("LynxAttack!");
-       enemy.TakeDamamge(50);
-       enemy.GetComponent<Enemy>().Knockback(200);
-     }
-             
+
+        _canLynxAttack = true;
+        int l = EnemyDetectorLynx.EnemiesDetectedLynx.Count;
+
+        for (int i = l - 1; i >= 0; i--)
+        {
+            Enemy enemy = EnemyDetectorLynx.EnemiesDetectedLynx[i];
+            Debug.Log("LynxAttack!");
+            enemy.TakeDamamge(50);
+            enemy.GetComponent<Enemy>().Knockback(200);
+        }
+        
 
 
+    }
+
+    void Dash(float dashPower)
+    {
+        
+        
+        if (verticalMovement ==0 && horizontalMovement == 0)
+        {
+            rb.velocity = playerDirection * dashPower;
+        }
+        else rb.velocity = new Vector3(horizontalMovement, 0f, verticalMovement) * dashPower;
     }
 }
 

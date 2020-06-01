@@ -1025,8 +1025,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 117980250}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.2000008}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 1722375441}
   m_RootOrder: 8
@@ -1336,7 +1336,7 @@ MonoBehaviour:
   dashVelocity: 10
   moveVector: {x: 0, y: 0, z: 0}
   moveVectorJump: {x: 0, y: 0, z: 0}
-  lastDir: {x: 0, y: 0, z: 0}
+  playerDirection: {x: 0, y: 0, z: 0}
   _CanEagleAttack: 1
   _canNewBearAttack: 1
   _canNewEagleAttack: 1
@@ -1368,7 +1368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5d080420ae68f4abf50de5e7628a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CanJump: 1
   _playerJumpForce: 7.5
   fallMultiplier: 5
   lowJumpMultiplier: 3
@@ -7133,8 +7132,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.7019774e-38, y: 2.7105054e-20, z: 2.3509887e-38,
-    w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
