@@ -6,8 +6,6 @@ public class BetterJump : MonoBehaviour
 {
     public static bool isJumping = false;
     [SerializeField]
-    private bool _CanJump = true;
-    [SerializeField]
     private float _playerJumpForce = 5f;
     [SerializeField]
     public float fallMultiplier = 2.5f;

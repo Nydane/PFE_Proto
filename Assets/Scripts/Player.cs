@@ -25,9 +25,7 @@ public class Player : MonoBehaviour
     public float dashVelocity = 10f;
     public Vector3 moveVector;
     public Vector3 moveVectorJump;
-    [SerializeField]
     private float horizontalMovement;
-    [SerializeField]
     private float verticalMovement;
     
 
@@ -42,6 +40,9 @@ public class Player : MonoBehaviour
     private bool _canLynxAttack = true;
     [SerializeField]
     private bool _canMove = true;
+    [SerializeField]
+    private bool _canRotate = true;
+
 
     [Header("PlayerInfo")]
     public Rigidbody rb;
@@ -60,6 +61,7 @@ public class Player : MonoBehaviour
     public float eagleTime = 0f;
     public int attackNum = 0;
     
+
 
 
 
@@ -112,25 +114,12 @@ public class Player : MonoBehaviour
 
         Vector3 playerDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-        if (horizontalMovement <= -0.1)
-        {
-            render.transform.rotation = Quaternion.LookRotation(playerDirection);
-
-        }
-        if (horizontalMovement >= 0.1)
+        if ((horizontalMovement != 0 || verticalMovement !=0) && _canRotate)
         {
             render.transform.rotation = Quaternion.LookRotation(playerDirection);
         }
-        if (verticalMovement <= -0.1)
-        {
-            render.transform.rotation = Quaternion.LookRotation(playerDirection);
-
-        }
-        if (verticalMovement >= 0.1)
-        {
-            render.transform.rotation = Quaternion.LookRotation(playerDirection);
-
-        }
+        
+       
 
         // speed Incr
         if (horizontalMovement > 0)
@@ -250,12 +239,8 @@ public class Player : MonoBehaviour
             {
                 StartCoroutine("NewBearAttack");
             }
-            //NewBearAttack();
 
-            if (_canNewBearAttack == false)
-            {
-                
-            }
+            
 
             
         }
@@ -457,6 +442,8 @@ public class Player : MonoBehaviour
         int l = EnemyDetectorBear.EnemiesDetectedBear.Count;
         _canNewBearAttack = false;
         _canMove = false;
+        _canRotate = false;
+
         for (int i = l - 1; i >= 0; i--)
         {
             Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
@@ -470,7 +457,9 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         _canNewBearAttack = true;
         _canMove = true;
-        
+        _canRotate = true;
+
+
     }
 
     void NewEagleAttack()

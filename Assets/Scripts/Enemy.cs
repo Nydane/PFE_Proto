@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(currentEnemyHealth);
+        //Debug.Log(currentEnemyHealth);
     }
 
     public void TakeDamamge (int Damage)
