@@ -21,9 +21,15 @@ public class Player : MonoBehaviour
     private float _playerSpeedDecr = 0.90f;
     [SerializeField]
     private float _airControlRatio = 0.5f;
+    [SerializeField]
+    public float dashVelocity = 10f;
     public Vector3 moveVector;
     public Vector3 moveVectorJump;
-
+    [SerializeField]
+    private float horizontalMovement;
+    [SerializeField]
+    private float verticalMovement;
+    
 
     [Header("Bools")]
     [SerializeField]
@@ -31,9 +37,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private bool _canNewBearAttack = true;
     [SerializeField]
-
     private bool _canNewEagleAttack = true;
-
+    [SerializeField]
+    private bool _canLynxAttack = true;
+    [SerializeField]
+    private bool _canMove = true;
 
     [Header("PlayerInfo")]
     public Rigidbody rb;
@@ -51,10 +59,12 @@ public class Player : MonoBehaviour
     public float attackResetTimer = 2f;
     public float eagleTime = 0f;
     public int attackNum = 0;
+    
 
-    
-    
-    
+
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -70,8 +80,8 @@ public class Player : MonoBehaviour
         
         
         // Identification des mouvements
-        float horizontalMovement = Input.GetAxisRaw("Horizontal");
-        float verticalMovement = Input.GetAxisRaw("Vertical");
+        horizontalMovement = Input.GetAxisRaw("Horizontal");
+        verticalMovement = Input.GetAxisRaw("Vertical");
         //Debug.Log(horizontalMovement);
         //Debug.Log(verticalMovement);
 
@@ -85,8 +95,16 @@ public class Player : MonoBehaviour
         }
         else
         {
+            if (_canMove)
+            {
+                rb.MovePosition(rb.position + moveVector * _playerSpeed * Time.deltaTime);
+
+            }
+            else
+            {
+                rb.MovePosition(rb.position + Vector3.zero * Time.deltaTime);
+            }
             // ce qui fait bouger le personnages
-            rb.MovePosition(rb.position + moveVector *_playerSpeed* Time.deltaTime);
         }
         
         
@@ -180,12 +198,15 @@ public class Player : MonoBehaviour
         
        
         
-        // Eagle Attack
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        // LynxAttack
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2) && _canLynxAttack == true)
         {
-                       
-            
-            if (_CanEagleAttack == true && attackNum == 0)
+
+
+            StartCoroutine(LynxAttack());
+
+            // Eagle Attack
+           /* if (_CanEagleAttack == true && attackNum == 0)
             {
                 
                 
@@ -217,7 +238,7 @@ public class Player : MonoBehaviour
                 attackNum = 0;
                 Debug.Log("Eagle3");
                 
-            }
+            }*/
   
         }
         
@@ -230,12 +251,19 @@ public class Player : MonoBehaviour
                 StartCoroutine("NewBearAttack");
             }
             //NewBearAttack();
+
+            if (_canNewBearAttack == false)
+            {
+                
+            }
+
             
         }
 
         //NewEagle Attack
         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
+           
             StartCoroutine("AnimNewEagleAttack");
         }
     }
@@ -428,7 +456,7 @@ public class Player : MonoBehaviour
     {
         int l = EnemyDetectorBear.EnemiesDetectedBear.Count;
         _canNewBearAttack = false;
-        
+        _canMove = false;
         for (int i = l - 1; i >= 0; i--)
         {
             Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
@@ -437,9 +465,12 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Enemy>().Knockback(200);
 
         }
+        
 
         yield return new WaitForSeconds(0.5f);
         _canNewBearAttack = true;
+        _canMove = true;
+        
     }
 
     void NewEagleAttack()
@@ -463,6 +494,30 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(2f);
         animator.SetBool("NewEagle", true);
         _canNewEagleAttack = true;
+
+    }
+
+
+    IEnumerator LynxAttack()
+    {
+        
+            _canLynxAttack = false;
+            int l = EnemyDetectorLynx.EnemiesDetectedLynx.Count;
+
+            rb.velocity = new Vector3(horizontalMovement, 0f, verticalMovement) * dashVelocity;
+
+            yield return new WaitForSeconds(0.4f);
+
+            for (int i = l - 1; i >= 0; i--)
+            {
+                Enemy enemy = EnemyDetectorLynx.EnemiesDetectedLynx[i];
+                Debug.Log("LynxAttack!");
+                enemy.TakeDamamge(50);
+                enemy.GetComponent<Enemy>().Knockback(200);
+
+            }
+        _canLynxAttack = true;
+
 
     }
 }
