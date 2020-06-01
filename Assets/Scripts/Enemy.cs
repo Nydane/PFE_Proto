@@ -48,6 +48,10 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("You killed an enemy");
         EnemyDetectorRectangle.EnemiesDetectedRectangle.Remove(this);
+        EnemyDectectorSphere.EnemiesDetectedSphere.Remove(this);
+        EnemyDetectorBear.EnemiesDetectedBear.Remove(this);
+        EnemyDetectorLynx.EnemiesDetectedLynx.Remove(this);
+        EnemyDetectorEagle.EnemiesDetectedEagle.Remove(this);
         gameObject.SetActive(false);
     }
 

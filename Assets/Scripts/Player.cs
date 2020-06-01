@@ -238,15 +238,11 @@ public class Player : MonoBehaviour
             if (_canNewBearAttack)
             {
                 StartCoroutine("NewBearAttack");
-            }
-
-            
-
-            
+            } 
         }
 
         //NewEagle Attack
-        if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button1)&&_canNewEagleAttack)
         {
            
             StartCoroutine("AnimNewEagleAttack");
@@ -490,22 +486,21 @@ public class Player : MonoBehaviour
     IEnumerator LynxAttack()
     {
         
-            _canLynxAttack = false;
-            int l = EnemyDetectorLynx.EnemiesDetectedLynx.Count;
+     _canLynxAttack = false;
+     
+     rb.velocity = new Vector3(horizontalMovement, 0f, verticalMovement) * dashVelocity;
 
-            rb.velocity = new Vector3(horizontalMovement, 0f, verticalMovement) * dashVelocity;
-
-            yield return new WaitForSeconds(0.4f);
-
-            for (int i = l - 1; i >= 0; i--)
-            {
-                Enemy enemy = EnemyDetectorLynx.EnemiesDetectedLynx[i];
-                Debug.Log("LynxAttack!");
-                enemy.TakeDamamge(50);
-                enemy.GetComponent<Enemy>().Knockback(200);
-
-            }
-        _canLynxAttack = true;
+     yield return new WaitForSeconds(0.4f);
+     _canLynxAttack = true;
+     int l = EnemyDetectorLynx.EnemiesDetectedLynx.Count;
+     for (int i = l - 1; i >= 0; i--)
+     {
+       Enemy enemy = EnemyDetectorLynx.EnemiesDetectedLynx[i];
+       Debug.Log("LynxAttack!");
+       enemy.TakeDamamge(50);
+       enemy.GetComponent<Enemy>().Knockback(200);
+     }
+             
 
 
     }
