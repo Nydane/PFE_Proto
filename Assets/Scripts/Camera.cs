@@ -12,8 +12,11 @@ public class Camera : MonoBehaviour
     private float _verticalOffset = 0f;
     public float horizontalOffset = 2.0f;
     public float constantHeight = 15f;
-    public float lerpTime = 0.1f;
     public Vector3 rotationCamera;
+    public float lerpTime = 0.1f;
+    public float verticalLerpTime = 0.1f;
+    public float movingPlayerHeight =5f;
+    public float cameraMovingHeight = 5f;
 
     private void Start()
     {
@@ -30,20 +33,20 @@ public class Camera : MonoBehaviour
         finalPos.y =constantHeight;
 
         //transform.position = finalPos;
-        transform.position = Vector3.Lerp(transform.position, finalPos, lerpTime);
+        Vector3 hMove = Vector3.Lerp(transform.position, finalPos, lerpTime);
+        hMove.y = 0;
+
+        Vector3 vMove = Vector3.Lerp(transform.position, finalPos, verticalLerpTime);
+        vMove.x = 0;
+        vMove.z = 0;
+        transform.position = vMove + hMove;
+
         transform.rotation = Quaternion.Euler(rotationCamera);
 
-
-         /*if (targetFocus.transform.position.y >= 7.5)
-         {
-             constantHeight = 20f;
-         }
-         else constantHeight = 15f;*/
-
+                 
         if (!BetterJump.isJumping)
         {
-            constantHeight = GetCameraheight(15, 1.9f, 5.5f, 5f, targetFocus.transform.position.y);
-
+            constantHeight = GetCameraheight(15, 1.9f, movingPlayerHeight, cameraMovingHeight, targetFocus.transform.position.y);
         }
 
 
@@ -59,14 +62,10 @@ public class Camera : MonoBehaviour
     /// <returns></returns>
     float GetCameraheight(float baseCamHeight, float baseHeight, float deltaX, float deltaY, float y)
     {
-        int i = 0;
+        
         float posY = y;
-        while(posY - deltaX >= baseHeight)
-        {
-            i++;
-            posY -= deltaX;
-                
-        }
+        
+        int i = (int)(posY / deltaX);
 
         return baseCamHeight + i * deltaY;
     }

@@ -30,7 +30,7 @@ public class BetterJump : MonoBehaviour
     private void Update()
     {
 
-
+       
         if (!CheckGroundStatus())
         {
             isJumping = true;
@@ -91,7 +91,7 @@ public class BetterJump : MonoBehaviour
         foreach (GameObject obj in downObj)
         {
             Ray downRay = new Ray(obj.transform.position, Vector3.down * rayDownLength);
-            Debug.DrawRay(obj.transform.position, Vector3.down * rayDownLength, Color.red);
+            Debug.DrawRay(obj.transform.position, Vector3.down * rayDownLength, Color.cyan);
 
             if (Physics.Raycast(downRay, rayDownLength))
             {
