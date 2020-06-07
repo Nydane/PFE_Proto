@@ -12,6 +12,8 @@ public class BetterJump : MonoBehaviour
     public float lowJumpMultiplier = 2f;
     public float stopJumpTimer;
     public float timeInTheAir;
+    public float jumpCount = 0f;
+    public bool jumpAgain = false;
     Rigidbody rb;
 
     [Header("RayCast")]
@@ -29,8 +31,20 @@ public class BetterJump : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) && jumpAgain && jumpCount == 1f)
+        {
+            timeInTheAir = 0f;
+            isJumping = true;
+            jumpCount = 0f;
+            Player.playerInstance.moveVectorJump = Player.playerInstance.moveVector;
 
-       
+
+            Debug.Log("jumpAgain");
+            rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
+            
+        }
+
+        // Jump system checking the ground status. If true you can jump with velocity, if false, you are juming
         if (!CheckGroundStatus())
         {
             isJumping = true;
@@ -44,14 +58,18 @@ public class BetterJump : MonoBehaviour
             Debug.Log("jump");
             rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
             isJumping = true;
+            jumpCount = 1f;
             
         }
         else if (CheckGroundStatus() && timeInTheAir > Time.deltaTime)
         {
-            //_CanJump = true;
+            
             isJumping = false;
-        }
-
+            
+        }  
+        
+        
+        
 
 
 
@@ -73,6 +91,8 @@ public class BetterJump : MonoBehaviour
         else if (!isJumping)
         {
             timeInTheAir = 0;
+            
+
 
         }
 
@@ -103,6 +123,7 @@ public class BetterJump : MonoBehaviour
         return false;
     }
 
+    
 }
 
    
