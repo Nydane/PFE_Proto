@@ -2,8 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void LegAction();
+
+
 public class BetterJump : MonoBehaviour
 {
+    public LegAction legAction;
+
+    [Header("Pomme")]
+    public Renderer legs;
+
+    [Header("Jump Movements")]
     public static bool isJumping = false;
     [SerializeField]
     private float _playerJumpForce = 5f;
@@ -13,15 +22,25 @@ public class BetterJump : MonoBehaviour
     public float stopJumpTimer;
     public float timeInTheAir;
     public float jumpCount = 0f;
-    public bool jumpAgain = false;
+    public bool jumpAbility = false;
     Rigidbody rb;
 
     [Header("RayCast")]
     public GameObject[] downObj;
     public float rayDownLength;
 
+    [Header("Legs Abilities")]
+    public int legCount = 0;
+    public LEGTYPE legType = LEGTYPE.DEFAULT;
+    public float bearFall;
+    public Transform eggFirePoint;
+    public GameObject eggPrefab;
+
+
+
 
     public GROUND_STATE groundState = GROUND_STATE.GROUNDED;
+    
 
     private void Awake()
     {
@@ -31,17 +50,54 @@ public class BetterJump : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.JoystickButton0) && jumpAgain && jumpCount == 1f)
+        
+
+        float rightTrigger = Input.GetAxisRaw("RightTrigger");
+        float leftTrigger = Input.GetAxisRaw("LeftTrigger");
+
+        #region LegCount
+
+        if (Input.GetKeyDown(KeyCode.JoystickButton4))
+        {
+            legCount--;
+            if (legCount < 0)
+            {
+                legCount = 3;
+            }
+
+            // Compte les legs :D
+            legType = GetLegTypeFromIndex(legCount);
+            SetLegAction(legType);
+        }
+
+        if (Input.GetKeyDown(KeyCode.JoystickButton5))
+        {
+            legCount++;
+            if (legCount >= 4)
+            {
+                legCount = 0;
+            }
+            // Compte les legs :D
+            legType = GetLegTypeFromIndex(legCount);
+            SetLegAction(legType);
+        }
+
+        
+       
+        #endregion
+
+        
+
+        //Logique pour la compétence des jammbes
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) && jumpAbility && jumpCount == 1f)
         {
             timeInTheAir = 0f;
             isJumping = true;
             jumpCount = 0f;
             Player.playerInstance.moveVectorJump = Player.playerInstance.moveVector;
+            legAction();
+        
 
-
-            Debug.Log("jumpAgain");
-            rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
-            
         }
 
         // Jump system checking the ground status. If true you can jump with velocity, if false, you are juming
@@ -72,7 +128,7 @@ public class BetterJump : MonoBehaviour
         
 
 
-
+        // logique pour avoir deux jumps différents
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
@@ -83,7 +139,7 @@ public class BetterJump : MonoBehaviour
             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
 
-        
+        // logique afin de limiter le temps dans les airs
         if (isJumping)
         {
             timeInTheAir += Time.deltaTime;
@@ -101,10 +157,13 @@ public class BetterJump : MonoBehaviour
         {
             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+
+
+        
     }
 
 
-
+    // un set de raycast qui check si le joueur touche le sol ou non
     bool CheckGroundStatus()
     {
         
@@ -123,10 +182,76 @@ public class BetterJump : MonoBehaviour
         return false;
     }
 
+    LEGTYPE GetLegTypeFromIndex (int i)
+    {
+        LEGTYPE lt = LEGTYPE.DEFAULT;
+        lt = (LEGTYPE)i;
+        return lt;
+    }
+
+
+    void DefaultLegs()
+    {
+        // tu ne fais rien. tu ne sers à rien. Tu es inutile. 
+        
+    }
+    void BearLegs()
+    {
+
+        
+        rb.velocity = new Vector3(0f, -bearFall, 0f);
+        
+    }
     
+    void EagleLegs()
+    {
+        Debug.Log("EagleJump");
+        rb.velocity = new Vector3(0f, _playerJumpForce, 0f);
+        Instantiate(eggPrefab, eggFirePoint.position, eggFirePoint.rotation);
+    }
+
+    void LynxLegs ()
+    {
+        // je suis dans la merde.
+    }
+
+    void SetLegAction(LEGTYPE lt)
+    {
+        switch (lt)
+        {
+            case LEGTYPE.DEFAULT:
+                legAction = DefaultLegs;
+                legs.GetComponent<Renderer>().material.color = Color.blue;
+                Player.playerInstance.playerMaxSpeed = 10f;
+                break;
+            case LEGTYPE.BEAR:
+                legAction = BearLegs;
+                legs.GetComponent<Renderer>().material.color = Color.black;
+                Player.playerInstance.playerMaxSpeed = 10f;
+                break;
+            case LEGTYPE.EAGLE:
+                legAction = EagleLegs;
+                legs.GetComponent<Renderer>().material.color = Color.white;
+                Player.playerInstance.playerMaxSpeed = 10f;
+                break;
+            case LEGTYPE.LYNX:
+                legAction = LynxLegs;
+                legs.GetComponent<Renderer>().material.color = Color.yellow;
+                Player.playerInstance.playerMaxSpeed = 15f;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
-   
+ public enum LEGTYPE
+ {
+    DEFAULT,
+    BEAR,
+    EAGLE,
+    LYNX
+ }  
 
 public enum GROUND_STATE
 {

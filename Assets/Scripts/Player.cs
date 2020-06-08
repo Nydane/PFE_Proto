@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _playerSpeed = 5f;
     [SerializeField]
-    private float _playerMaxSpeed = 20f;
+    public float playerMaxSpeed = 20f;
     [SerializeField]
     private float _playerMinSpeed = 5f;
     [SerializeField]
@@ -164,12 +164,12 @@ public class Player : MonoBehaviour
         // speed Incr
         if (horizontalMovement > 0)
         {
-            if (_playerSpeed < _playerMaxSpeed)
+            if (_playerSpeed < playerMaxSpeed)
             {
                 _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
-                if (_playerSpeed > _playerMaxSpeed)
+                if (_playerSpeed > playerMaxSpeed)
                 {
-                    _playerSpeed = _playerMaxSpeed;
+                    _playerSpeed = playerMaxSpeed;
                 }
             }
 
@@ -177,12 +177,12 @@ public class Player : MonoBehaviour
 
         if (horizontalMovement < 0)
         {
-            if (_playerSpeed < _playerMaxSpeed)
+            if (_playerSpeed < playerMaxSpeed)
             {
                 _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
-                if (_playerSpeed > _playerMaxSpeed)
+                if (_playerSpeed > playerMaxSpeed)
                 {
-                    _playerSpeed = _playerMaxSpeed;
+                    _playerSpeed = playerMaxSpeed;
                 }
             }
 
@@ -191,12 +191,12 @@ public class Player : MonoBehaviour
 
         if (verticalMovement < 0)
         {
-            if (_playerSpeed < _playerMaxSpeed)
+            if (_playerSpeed < playerMaxSpeed)
             {
                 _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
-                if (_playerSpeed > _playerMaxSpeed)
+                if (_playerSpeed > playerMaxSpeed)
                 {
-                    _playerSpeed = _playerMaxSpeed;
+                    _playerSpeed = playerMaxSpeed;
                 }
             }
 
@@ -204,12 +204,12 @@ public class Player : MonoBehaviour
 
         if (verticalMovement > 0)
         {
-            if (_playerSpeed < _playerMaxSpeed)
+            if (_playerSpeed < playerMaxSpeed)
             {
                 _playerSpeed += (Time.deltaTime * _playerSpeedIncr);
-                if (_playerSpeed > _playerMaxSpeed)
+                if (_playerSpeed > playerMaxSpeed)
                 {
-                    _playerSpeed = _playerMaxSpeed;
+                    _playerSpeed = playerMaxSpeed;
                 }
             }
 
