@@ -35,11 +35,14 @@ public class BetterJump : MonoBehaviour
     public float bearFall;
     public Transform eggFirePoint;
     public GameObject eggPrefab;
+    public float lynxDash;
+    public float lynxJump;
+    public float lynxSpeed;
 
 
 
 
-    public GROUND_STATE groundState = GROUND_STATE.GROUNDED;
+    //public GROUND_STATE groundState = GROUND_STATE.GROUNDED;
     
 
     private void Awake()
@@ -198,7 +201,7 @@ public class BetterJump : MonoBehaviour
     void BearLegs()
     {
 
-        
+        Debug.Log("BearJump");
         rb.velocity = new Vector3(0f, -bearFall, 0f);
         
     }
@@ -212,7 +215,8 @@ public class BetterJump : MonoBehaviour
 
     void LynxLegs ()
     {
-        // je suis dans la merde.
+        Debug.Log("LynxJump");
+        rb.velocity = new Vector3(Player.playerInstance.horizontalMovement * lynxDash, lynxJump, Player.playerInstance.verticalMovement * lynxDash) ;
     }
 
     void SetLegAction(LEGTYPE lt)
@@ -237,7 +241,7 @@ public class BetterJump : MonoBehaviour
             case LEGTYPE.LYNX:
                 legAction = LynxLegs;
                 legs.GetComponent<Renderer>().material.color = Color.yellow;
-                Player.playerInstance.playerMaxSpeed = 15f;
+                Player.playerInstance.playerMaxSpeed = lynxSpeed;
                 break;
             default:
                 break;

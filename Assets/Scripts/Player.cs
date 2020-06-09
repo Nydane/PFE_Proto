@@ -26,8 +26,8 @@ public class Player : MonoBehaviour
     public Vector3 moveVector;
     public Vector3 moveVectorJump;
     public Vector3 playerDirection;
-    private float horizontalMovement;
-    private float verticalMovement;
+    public float horizontalMovement;
+    public float verticalMovement;
     private Vector3 lastDir;
 
     [Header("Bools")]
