@@ -32,10 +32,12 @@ public class EnemyBehavior : MonoBehaviour
     private int randomSpot;
     private float waitTime;
     public float startWaitTime;
+    public float patrollingSpeed = 5f;
 
-    //[Header("Dying")]
-    
-    
+    [Header("Running")]
+    public float runningSpeed;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -64,18 +66,29 @@ public class EnemyBehavior : MonoBehaviour
     
     void Patrolling()
     {
-        speed = 5f;
+        speed = patrollingSpeed;
         Debug.Log("Patrolling");
         transform.position = Vector3.MoveTowards(transform.position, moveSpots[randomSpot].position, speed * Time.deltaTime);
-        animator.Play("Walking");
+        Quaternion enemyRota = Quaternion.LookRotation(moveSpots[randomSpot].position - transform.position);
+        transform.rotation = enemyRota;
+        //animator.Play("Walking");
         if (Vector3.Distance(transform.position, moveSpots[randomSpot].position) < 0.2f)
         {
+            
+            
             if (waitTime <= 0)
             {
                 randomSpot = Random.Range(0, moveSpots.Length);
+                
                 waitTime = startWaitTime;
             }
-            else waitTime -= Time.deltaTime;
+            else
+            {
+                waitTime -= Time.deltaTime;
+                
+
+
+            }
         }
     }
 
@@ -98,7 +111,9 @@ public class EnemyBehavior : MonoBehaviour
     {
         time += Time.deltaTime;
         Quaternion arrowRota = Quaternion.LookRotation(target.transform.position - arrowPos.transform.position);
-        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position); // marche pas bien
+        Quaternion enemyRota = Quaternion.LookRotation(target.transform.position - transform.position);
+        transform.rotation = enemyRota; // marche pas bien
+        
         if (time > fireRate)
         {
             Instantiate(arrow, arrowPos.position, arrowRota);
@@ -109,10 +124,12 @@ public class EnemyBehavior : MonoBehaviour
 
     void Running()
     {
-        speed = 10f;
+        speed = runningSpeed;
         Debug.Log("Running");
         Vector3 moveDirection = Player.playerInstance.transform.position - transform.position;
         _rb.MovePosition(transform.position + moveDirection.normalized * speed * Time.deltaTime);
+        Quaternion enemyRota = Quaternion.LookRotation(target.transform.position - transform.position);
+        transform.rotation = enemyRota;
     }
 
    public void UpdateEnemyState (ENEMY_STATE enemyState)
@@ -136,7 +153,8 @@ public class EnemyBehavior : MonoBehaviour
                 isRunning = false;
                 isPatrolling = false;
                 isDying = true;
-                animator.Play("Death");
+                //animator.Play("Death");
+                BehaviorDie();
                 break;
             case ENEMY_STATE.SHOOTING:
                 Debug.Log("Shooting");
