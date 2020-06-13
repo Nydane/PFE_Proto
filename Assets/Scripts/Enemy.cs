@@ -10,12 +10,19 @@ public class Enemy : MonoBehaviour
     private Player _player;
     private Rigidbody rbEnemy;
     public HealthBar healthBar;
+    public bool hasBehavior;
+    public EnemyBehavior enemyBehaviorScript;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        if (hasBehavior)
+        {
+            enemyBehaviorScript = GetComponent<EnemyBehavior>();
+
+        }
         currentEnemyHealth = maxenemyHealth;
         healthBar.SetMaxHealth(currentEnemyHealth);
         rbEnemy = transform.GetComponent<Rigidbody>();
@@ -28,7 +35,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(currentEnemyHealth);
+        
     }
 
     public void TakeDamamge (int Damage)
@@ -40,7 +47,12 @@ public class Enemy : MonoBehaviour
         
         if (currentEnemyHealth <= 0)
         {
-            Die();
+            if (hasBehavior)
+            {
+                enemyBehaviorScript.UpdateEnemyState(ENEMY_STATE.DYING);
+                enemyBehaviorScript.enemyState = ENEMY_STATE.DYING;
+            }         
+            else Die();
         }
     }
 

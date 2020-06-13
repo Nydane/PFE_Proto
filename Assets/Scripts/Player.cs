@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     public GameObject render;
     public Animator animator;
+    public Renderer arms;
 
     [Header("Attack")]
     public Transform attackPoint;
@@ -540,13 +541,13 @@ public class Player : MonoBehaviour
 
 
         Dash(10);
-        
-        
-    
-    
-        
 
-     yield return new WaitForSeconds(0.4f);
+        //arms.GetComponent<Renderer>().material.color = Color.yellow;
+
+
+
+
+        yield return new WaitForSeconds(0.4f);
 
         _canLynxAttack = true;
         int l = EnemyDetectorLynx.EnemiesDetectedLynx.Count;

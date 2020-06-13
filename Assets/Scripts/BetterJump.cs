@@ -151,8 +151,6 @@ public class BetterJump : MonoBehaviour
         {
             timeInTheAir = 0;
             
-
-
         }
 
 
@@ -225,7 +223,7 @@ public class BetterJump : MonoBehaviour
         {
             case LEGTYPE.DEFAULT:
                 legAction = DefaultLegs;
-                legs.GetComponent<Renderer>().material.color = Color.blue;
+                legs.GetComponent<Renderer>().material.color = Color.gray;
                 Player.playerInstance.playerMaxSpeed = 10f;
                 break;
             case LEGTYPE.BEAR:
