@@ -27,6 +27,11 @@ public class Arrow : MonoBehaviour
             Destroy(gameObject);
             Debug.Log("Player is hit");
         }
+        else if (other.tag == "Gound")
+        {
+            Destroy(gameObject);
+            Debug.Log("Arrow vs Wall : Wall Wins");
+        }
     }
     // Update is called once per frame
     void Update()
