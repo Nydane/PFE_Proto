@@ -120,16 +120,18 @@ public class EnemyBehavior : MonoBehaviour
         {
             agent.SetDestination(target.transform.position);
             agent.speed = runningSpeed;
+
         }
         else if (!agent.Raycast(target.transform.position, out hit))
         {
             time += Time.deltaTime;
             Quaternion arrowRota = Quaternion.LookRotation(target.transform.position - arrowPos.transform.position);
             Quaternion enemyRota = Quaternion.LookRotation(target.transform.position - transform.position);
-            transform.rotation = enemyRota; // marche pas bien
+            
+            
             agent.speed = 0f;
-            _rb.velocity = Vector3.zero;
-            agent.angularSpeed = 5000f;
+            agent.transform.rotation = enemyRota;
+            
             if (time > fireRate)
             {
                 Instantiate(arrow, arrowPos.position, arrowRota);
