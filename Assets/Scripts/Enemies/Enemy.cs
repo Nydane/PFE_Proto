@@ -64,6 +64,7 @@ public class Enemy : MonoBehaviour
         EnemyDetectorBear.EnemiesDetectedBear.Remove(this);
         EnemyDetectorLynx.EnemiesDetectedLynx.Remove(this);
         EnemyDetectorEagle.EnemiesDetectedEagle.Remove(this);
+        EnemyDetectorBasic.EnemiesDetectedBasic.Remove(this);
         gameObject.SetActive(false);
     }
 
