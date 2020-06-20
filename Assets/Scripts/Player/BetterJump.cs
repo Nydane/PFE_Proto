@@ -143,7 +143,7 @@ public class BetterJump : MonoBehaviour
             rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
 
         }
-        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.JoystickButton0))
+        else if (rb.velocity.y > 0 /*&& !Input.GetKey(KeyCode.JoystickButton0)*/)  
         {
             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }

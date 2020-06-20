@@ -30,7 +30,7 @@ public class Camera : MonoBehaviour
 
     private void Update()
     {
-        rayToCameraPos = new Ray(transform.position, targetFocus.transform.position - transform.position);
+        /*rayToCameraPos = new Ray(transform.position, targetFocus.transform.position - transform.position);
         Debug.DrawRay(transform.position, targetFocus.transform.position - transform.position);
         
         if (Physics.Raycast(rayToCameraPos, out RaycastHit hitInfo, 1000))
@@ -47,7 +47,7 @@ public class Camera : MonoBehaviour
             {
                 groundRenderer.material = oldMaterial;
             }
-        }
+        }*/
     }
     // Update is called once per frame
     void LateUpdate()
