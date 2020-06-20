@@ -32,12 +32,18 @@ public class BetterJump : MonoBehaviour
     [Header("Legs Abilities")]
     public int legCount = 0;
     public LEGTYPE legType = LEGTYPE.DEFAULT;
+
+    [Header("BearLegs")]
+    public float bearSpeed = 8.1f;
     public float bearFall;
+    [Header("EagleLegs")]
+    public float eagleSpeed = 8.1f;
     public Transform eggFirePoint;
     public GameObject eggPrefab;
+    [Header("LynxLegs")]
     public float lynxDash;
     public float lynxJump;
-    public float lynxSpeed;
+    public float lynxSpeed = 10f;
 
 
 
@@ -224,22 +230,26 @@ public class BetterJump : MonoBehaviour
             case LEGTYPE.DEFAULT:
                 legAction = DefaultLegs;
                 legs.GetComponent<Renderer>().material.color = Color.gray;
-                Player.playerInstance.playerMaxSpeed = 10f;
+                Player.playerInstance.playerMaxSpeed = 8f;
+                Player.playerInstance._playerSpeed = 8f;
                 break;
             case LEGTYPE.BEAR:
                 legAction = BearLegs;
                 legs.GetComponent<Renderer>().material.color = Color.black;
-                Player.playerInstance.playerMaxSpeed = 10f;
+                Player.playerInstance.playerMaxSpeed = bearSpeed;
+                Player.playerInstance._playerSpeed = bearSpeed;
                 break;
             case LEGTYPE.EAGLE:
                 legAction = EagleLegs;
                 legs.GetComponent<Renderer>().material.color = Color.white;
-                Player.playerInstance.playerMaxSpeed = 10f;
+                Player.playerInstance.playerMaxSpeed = eagleSpeed;
+                Player.playerInstance._playerSpeed = eagleSpeed;
                 break;
             case LEGTYPE.LYNX:
                 legAction = LynxLegs;
                 legs.GetComponent<Renderer>().material.color = Color.yellow;
                 Player.playerInstance.playerMaxSpeed = lynxSpeed;
+                Player.playerInstance._playerSpeed = lynxSpeed;
                 break;
             default:
                 break;

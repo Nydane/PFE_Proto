@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
         
     [Header("Mouvements")]
     [SerializeField]
-    private float _playerSpeed = 5f;
+    public float _playerSpeed = 5f;
     [SerializeField]
     public float playerMaxSpeed = 20f;
     [SerializeField]
@@ -540,6 +540,8 @@ public class Player : MonoBehaviour
     void BasicAttackRange()
     {
         _canRotate = false;
+        _playerSpeed = 7f;
+        playerMaxSpeed = 7f;
 
         if (channelingBasicAttack >= 3)
         {
@@ -569,6 +571,9 @@ public class Player : MonoBehaviour
     {
         _canRotate = true;
         Debug.Log("BasicAttack");
+        _playerSpeed = 10f;
+        playerMaxSpeed = 10f;
+
         int l = EnemyDetectorBasic.EnemiesDetectedBasic.Count;
 
 

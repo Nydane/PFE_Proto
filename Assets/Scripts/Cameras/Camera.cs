@@ -18,11 +18,37 @@ public class Camera : MonoBehaviour
     public float movingPlayerHeight =5f;
     public float cameraMovingHeight = 5f;
 
+    Ray rayToCameraPos;
+    public Renderer groundRenderer;
+    public Material newMaterial;
+    public Material oldMaterial;
+
     private void Start()
     {
         
     }
 
+    private void Update()
+    {
+        rayToCameraPos = new Ray(transform.position, targetFocus.transform.position - transform.position);
+        Debug.DrawRay(transform.position, targetFocus.transform.position - transform.position);
+        
+        if (Physics.Raycast(rayToCameraPos, out RaycastHit hitInfo, 1000))
+        {
+            if (hitInfo.collider.tag == "Ground")
+            {
+
+                groundRenderer = hitInfo.transform.GetComponent<Renderer>();
+                oldMaterial = groundRenderer.material;
+                groundRenderer.material = newMaterial;
+
+            }
+            else if (hitInfo.collider.tag == "Ground")
+            {
+                groundRenderer.material = oldMaterial;
+            }
+        }
+    }
     // Update is called once per frame
     void LateUpdate()
     {
