@@ -68,9 +68,12 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Knockback (int KnockPower)
+    public void Knockback (float KnockPower)
     {
         var knockDirection = transform.position - Player.playerInstance.transform.position;
-        rbEnemy.AddForce(knockDirection * KnockPower);
+        
+        rbEnemy.AddForce(knockDirection.normalized * KnockPower, ForceMode.Impulse);
+        //rbEnemy.AddForce((rbEnemy.velocity * KnockPower)*-1 , ForceMode.Impulse);
+
     }
 }

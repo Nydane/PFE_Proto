@@ -229,7 +229,7 @@ public class BetterJump : MonoBehaviour
         {
             case LEGTYPE.DEFAULT:
                 legAction = DefaultLegs;
-                legs.GetComponent<Renderer>().material.color = Color.gray;
+                legs.GetComponent<Renderer>().material.color = Color.green;
                 Player.playerInstance.playerMaxSpeed = 8f;
                 Player.playerInstance._playerSpeed = 8f;
                 break;

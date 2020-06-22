@@ -60,8 +60,7 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*Vector3 enemyMoveVector = 
-        transform.rotation = Quaternion.LookRotation(enemyMoveVector);*/
+        
 
 
     }

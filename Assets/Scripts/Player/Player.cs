@@ -52,8 +52,6 @@ public class Player : MonoBehaviour
     public Renderer arms;
 
     [Header("Attack")]
-    [SerializeField]
-    private Vector3 _bearAttackRange;
     public LayerMask enemyLayer;
     public float attackResetTimer = 2f;
     public float eagleTime = 0f;
@@ -61,9 +59,11 @@ public class Player : MonoBehaviour
     public float channelingBasicAttack = 0f;
     public Transform basicTransform;
 
-
-
-
+    [Header("Bear")]
+    [SerializeField]
+    private Vector3 _bearAttackRange;
+    public float bearKnockPower = 10f;
+    public float bearTimeBetweenAttack = 0.5f;
 
 
 
@@ -277,6 +277,7 @@ public class Player : MonoBehaviour
             {
                 StartCoroutine("NewBearAttack");
             }
+            
         }
 
         //NewEagle Attack
@@ -457,13 +458,13 @@ public class Player : MonoBehaviour
         {
             Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
             Debug.Log("NewBearAttack!");
-            enemy.TakeDamamge(50);
-            enemy.GetComponent<Enemy>().Knockback(200);
+            //enemy.TakeDamamge(50);
+            enemy.GetComponent<Enemy>().Knockback(bearKnockPower);
 
         }
         
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(bearTimeBetweenAttack);
         _canNewBearAttack = true;
         _canMove = true;
         _canRotate = true;
