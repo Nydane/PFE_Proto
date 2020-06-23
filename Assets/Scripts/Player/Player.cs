@@ -531,7 +531,7 @@ public class Player : MonoBehaviour
             Enemy enemy = EnemyDetectorLynx.EnemiesDetectedLynx[i];
             Debug.Log("LynxAttack!");
             enemy.TakeDamamge(50);
-            enemy.GetComponent<Enemy>().Knockback(200);
+            enemy.GetComponent<Enemy>().Knockback(10);
         }
         
 
