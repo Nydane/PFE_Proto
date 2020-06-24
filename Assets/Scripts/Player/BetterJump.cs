@@ -156,7 +156,8 @@ public class BetterJump : MonoBehaviour
         else if (!isJumping)
         {
             timeInTheAir = 0;
-            
+
+
         }
 
 
@@ -253,6 +254,15 @@ public class BetterJump : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Ground")
+        {
+            jumpCount = 0f;
+
         }
     }
 }

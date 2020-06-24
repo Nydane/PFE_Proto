@@ -339,7 +339,11 @@ public class Player : MonoBehaviour
         {
 
             BearIsCharging();
+            if (channelingBearAttack >= 5)
+            {
+                StartCoroutine("BearIsAttacking");
 
+            }
 
 
         }
@@ -347,7 +351,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Joystick1Button2) && _canNewBearAttack == true)
         {
             StartCoroutine("BearIsAttacking"); 
-            //channelingBearAttack = 0f;
+            
             bearAttackZone.enabled = false;
 
 
@@ -703,7 +707,6 @@ public class Player : MonoBehaviour
         }
         else if (channelingBearAttack >= 5)
         {
-            StartCoroutine("BearIsAttacking");
             bearAttackZone.enabled = false;
 
             channelingBearAttack = 5f;
