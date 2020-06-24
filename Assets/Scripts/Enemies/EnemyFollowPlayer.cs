@@ -18,8 +18,11 @@ public class EnemyFollowPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 moveDirection = Player.playerInstance.transform.position - transform.position;
-        _rb.MovePosition(transform.position + moveDirection.normalized * speed * Time.deltaTime);
-        //transform.position = Vector3.MoveTowards(transform.position, Player.playerInstance.transform.position, speed * Time.deltaTime);
+        if (enemy.isParalyzed == false)
+        {
+            Vector3 moveDirection = Player.playerInstance.transform.position - transform.position;
+            _rb.MovePosition(transform.position + moveDirection.normalized * speed * Time.deltaTime);
+        }
+        
     }
 }

@@ -21,8 +21,7 @@ public class Player : MonoBehaviour
     private float _playerSpeedDecr = 0.90f;
     [SerializeField]
     private float _airControlRatio = 0.5f;
-    [SerializeField]
-    public float dashVelocity = 10f;
+
     public Vector3 moveVector;
     public Vector3 moveVectorJump;
     public Vector3 playerDirection;
@@ -31,18 +30,19 @@ public class Player : MonoBehaviour
     private Vector3 lastDir;
 
     [Header("Bools")]
-    [SerializeField]
+    /*[SerializeField]
     private bool _CanEagleAttack = true;
-    [SerializeField]
-    private bool _canNewBearAttack = true;
+    
     [SerializeField]
     private bool _canNewEagleAttack = true;
     [SerializeField]
-    private bool _canLynxAttack = true;
+    private bool _canLynxAttack = true;*/
+    
     [SerializeField]
     private bool _canMove = true;
     [SerializeField]
     private bool _canRotate = true;
+    
 
 
     [Header("PlayerInfo")]
@@ -53,19 +53,40 @@ public class Player : MonoBehaviour
 
     [Header("Attack")]
     public LayerMask enemyLayer;
-    public float attackResetTimer = 2f;
-    public float eagleTime = 0f;
-    public int attackNum = 0;
-    public float channelingBasicAttack = 0f;
-    public Transform basicTransform;
+    //public float attackResetTimer = 2f;
+    //public float eagleTime = 0f;
+    //public int attackNum = 0;
+    //public float channelingBasicAttack = 0f;
+    //public Transform basicTransform;
 
     [Header("Bear")]
+    //[SerializeField]
+    //private Vector3 _bearAttackRange;
     [SerializeField]
-    private Vector3 _bearAttackRange;
-    public float bearKnockPower = 10f;
+    private bool _canNewBearAttack = true;
+    public float bearKnockPower1 = 10f;
+    public float bearKnockPower2 = 20f;
+    public float bearKnockPower3 = 30f;
     public float bearTimeBetweenAttack = 0.5f;
+    public float channelingBearAttack = 0f;
+    public Material firstStack;
+    public Material secondStack;
+    public Material thirdStack;
+    public Renderer bearAttackZone;
 
+    [Header("Venom")]
+    public GameObject venomArrow;
+    public Transform venomArrowPos;
+    public float timeBetweenShoots;
+    private float time;
+    public bool canShoot = true;
 
+    [Header("Dash")]
+    public float timeBetweenDash = 2f;
+    [SerializeField]
+    private bool _canDash = true;
+    [SerializeField]
+    public float dashVelocity = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -224,16 +245,16 @@ public class Player : MonoBehaviour
 
 
 
-
-        // LynxAttack
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2) && _canLynxAttack == true)
+        #region oldAttacks
+        // TOUCHE X : LynxAttack
+        /*if (Input.GetKeyDown(KeyCode.Joystick1Button2) && _canLynxAttack == true)
         {
 
-
+            // Lynx Attaque
             StartCoroutine(LynxAttack());
 
             // Eagle Attack
-            /* if (_CanEagleAttack == true && attackNum == 0)
+             if (_CanEagleAttack == true && attackNum == 0)
              {
 
 
@@ -265,20 +286,20 @@ public class Player : MonoBehaviour
                  attackNum = 0;
                  Debug.Log("Eagle3");
 
-             }*/
+             }
 
-        }
+        }*/
 
 
-        //NewBear Attack
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        //TOUCHE Y : NewBear Attack
+        /*if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
             if (_canNewBearAttack)
             {
                 StartCoroutine("NewBearAttack");
             }
             
-        }
+        }*/
 
         //NewEagle Attack
         /*if (Input.GetKeyDown(KeyCode.Joystick1Button1) && _canNewEagleAttack)
@@ -287,7 +308,8 @@ public class Player : MonoBehaviour
             StartCoroutine(NewEagleAttackRoutine());
         }*/
 
-        if (Input.GetKey(KeyCode.Joystick1Button1))
+        // TOUCHE B : Basic attaque
+        /*if (Input.GetKey(KeyCode.Joystick1Button1))
         {
 
             BasicAttackRange();
@@ -300,9 +322,49 @@ public class Player : MonoBehaviour
             BasicAttack();
             channelingBasicAttack = 0f;
             basicTransform.localScale = new Vector3(1, 1, 1);
+        }*/
+
+        #endregion
+
+        // TOUCHE B : DASH
+        if (Input.GetKeyUp(KeyCode.Joystick1Button1) && _canDash)
+        {
+            StartCoroutine(Dash(dashVelocity));
+
+            
+        }
+
+        //TOUCHE X : BEAR attaque
+        if (Input.GetKey(KeyCode.Joystick1Button2) && _canNewBearAttack == true)
+        {
+
+            BearIsCharging();
+
+
+
+        }
+
+        if (Input.GetKeyUp(KeyCode.Joystick1Button2) && _canNewBearAttack == true)
+        {
+            StartCoroutine("BearIsAttacking"); 
+            //channelingBearAttack = 0f;
+            bearAttackZone.enabled = false;
+
+
+        }
+
+
+        //TOUCHE Y : VENOM attaque
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3) && canShoot)
+        {
+            StartCoroutine("VenomAttack");
+
+
         }
     }
 
+    #region oldAttackFunctions
+    /*
     // Not use for now
     void Attack ()
     {
@@ -317,7 +379,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    
     // Not use for now
     void GrizzlyAttack()
     {
@@ -495,7 +556,7 @@ public class Player : MonoBehaviour
         _canNewEagleAttack = true;
 
     }
-
+    // Not use for now
     IEnumerator NewEagleAttackRoutine()
     {
         int l = EnemyDetectorEagle.EnemiesDetectedEagle.Count;
@@ -511,6 +572,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _canNewEagleAttack = true;
     }
+    // Not use for now
 
     IEnumerator LynxAttack()
     {
@@ -537,7 +599,7 @@ public class Player : MonoBehaviour
 
 
     }
-
+    // Not use for now
     void BasicAttackRange()
     {
         _canRotate = false;
@@ -568,6 +630,8 @@ public class Player : MonoBehaviour
         
     }
 
+
+    // Not use for now
     void BasicAttack()
     {
         _canRotate = true;
@@ -603,10 +667,104 @@ public class Player : MonoBehaviour
             
 
         }
+    }*/
+
+#endregion
+
+    void BearIsCharging()
+    {
+        _canRotate = false;
+        _canMove = false;
+
+
+        
+         channelingBearAttack += Time.deltaTime;
+
+
+        if (channelingBearAttack > 0 && channelingBearAttack < 1)
+        {
+            bearAttackZone.enabled = true;
+
+            bearAttackZone.material = firstStack;
+        }
+        else if (channelingBearAttack >= 1 && channelingBearAttack < 2)
+        {
+            bearAttackZone.enabled = true;
+
+            bearAttackZone.material = secondStack;
+
+        }
+        else if (channelingBearAttack >= 2 && channelingBearAttack <= 3)
+        {
+            bearAttackZone.enabled = true;
+
+            bearAttackZone.material = thirdStack;
+
+        }
+        else if (channelingBearAttack >= 5)
+        {
+            StartCoroutine("BearIsAttacking");
+            bearAttackZone.enabled = false;
+
+            channelingBearAttack = 5f;
+
+        }
+
     }
 
+    IEnumerator BearIsAttacking()
+    {
+        
+            
 
-    void Dash(float dashPower)
+
+            int l = EnemyDetectorBear.EnemiesDetectedBear.Count;
+
+
+            for (int i = l - 1; i >= 0; i--)
+            {
+                Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
+
+
+                if (channelingBearAttack > 0 && channelingBearAttack < 1)
+                {
+
+                    enemy.Knockback(bearKnockPower1);
+                }
+                else if (channelingBearAttack >= 1 && channelingBearAttack < 2)
+                {
+
+                    enemy.Knockback(bearKnockPower2);
+                }
+                else if (channelingBearAttack >= 2 && channelingBearAttack <= 5)
+                {
+
+                    enemy.Knockback(bearKnockPower3);
+                }
+
+
+
+            }
+
+        _canRotate = true;
+        _canMove = true;
+        Debug.Log("BearAttack");
+        _canNewBearAttack = false;
+        yield return new WaitForSeconds(bearTimeBetweenAttack);
+        _canNewBearAttack = true;
+        channelingBearAttack = 0f;
+
+    }
+
+    IEnumerator VenomAttack()
+    {
+      
+        Instantiate(venomArrow, venomArrowPos.position, venomArrowPos.rotation);
+        canShoot = false;
+        yield return new WaitForSeconds(timeBetweenShoots);
+        canShoot = true;
+    }
+    IEnumerator Dash(float dashPower)
     {
         
         
@@ -615,6 +773,13 @@ public class Player : MonoBehaviour
             rb.velocity = playerDirection * dashPower;
         }
         else rb.velocity = new Vector3(horizontalMovement, 0f, verticalMovement) * dashPower;
+
+        _canDash = false;
+
+        yield return new WaitForSeconds(timeBetweenDash);
+
+        _canDash = true;
+
     }
 }
 

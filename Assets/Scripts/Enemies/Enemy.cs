@@ -4,20 +4,36 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-
+    [Header("Health")]
     public int currentEnemyHealth;
     public int maxenemyHealth = 100;
+    public HealthBar healthBar;
+
+    [Header("Pomme")]
     private Player _player;
     private Rigidbody rbEnemy;
-    public HealthBar healthBar;
+    private Renderer _renderer;
+    public Material enemyMaterial;
+
+    [Header("Bool")]
     public bool hasBehavior;
+
+    [Header("Script")]
+
     public EnemyBehavior enemyBehaviorScript;
 
+
+    [Header("Paralyzed")]
+    public bool isParalyzed = false;
+    public float ParalyzedTimer = 3f;
+    public Material ParalyzedMaterial;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        _renderer = GetComponent<Renderer>();
+
         if (hasBehavior)
         {
             enemyBehaviorScript = GetComponent<EnemyBehavior>();
@@ -67,6 +83,17 @@ public class Enemy : MonoBehaviour
         EnemyDetectorBasic.EnemiesDetectedBasic.Remove(this);
         gameObject.SetActive(false);
     }
+
+    IEnumerator Paralyzed()
+    {
+        isParalyzed = true;
+        _renderer.material = ParalyzedMaterial;
+        yield return new WaitForSeconds(ParalyzedTimer);
+        isParalyzed = false;
+        _renderer.material = enemyMaterial;
+
+    }
+
 
     public void Knockback (float KnockPower)
     {

@@ -18,11 +18,11 @@ public class Camera : MonoBehaviour
     public float movingPlayerHeight =5f;
     public float cameraMovingHeight = 5f;
 
-    Ray rayToCameraPos;
+    /*Ray rayToCameraPos;
     private Renderer _groundRenderer;
     private GameObject _groundObj;
     public Material newMaterial;
-    public Material oldMaterial;
+    public Material oldMaterial;*/
 
     private void Start()
     {
