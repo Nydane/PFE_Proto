@@ -717,36 +717,27 @@ public class Player : MonoBehaviour
 
     IEnumerator BearIsAttacking()
     {
-        
-            
-
 
             int l = EnemyDetectorBear.EnemiesDetectedBear.Count;
-
-
             for (int i = l - 1; i >= 0; i--)
             {
                 Enemy enemy = EnemyDetectorBear.EnemiesDetectedBear[i];
 
-
                 if (channelingBearAttack > 0 && channelingBearAttack < 1)
                 {
-
                     enemy.Knockback(bearKnockPower1);
+                    enemy.KnockOut(1);
                 }
                 else if (channelingBearAttack >= 1 && channelingBearAttack < 2)
                 {
-
                     enemy.Knockback(bearKnockPower2);
+                    enemy.KnockOut(2);
                 }
                 else if (channelingBearAttack >= 2 && channelingBearAttack <= 5)
                 {
-
                     enemy.Knockback(bearKnockPower3);
+                    enemy.KnockOut(3);
                 }
-
-
-
             }
 
         _canRotate = true;

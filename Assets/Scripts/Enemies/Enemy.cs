@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -29,6 +30,15 @@ public class Enemy : MonoBehaviour
     public Material ParalyzedMaterial;
 
 
+    [Header("KnockOut")]
+    public int numberToGetKnockOut = 3;
+    public int knockOutCount;
+    public float timeKO = 5f;
+    public float knockOutTimer;
+    public bool isKnockOut = false;
+    public GameObject boxKnockOut;
+    public Material knockOutMaterial;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +61,19 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        
+        // Logique pour le knockOut
+         if (knockOutCount > 0)
+         {
+            
+            knockOutTimer -= Time.deltaTime;
+            
+            if (knockOutTimer <= 0)
+            {
+                SetKOState(false);
+            }
+
+         }
+
     }
 
     public void TakeDamamge (int Damage)
@@ -94,13 +116,44 @@ public class Enemy : MonoBehaviour
 
     }
 
+    public void KnockOut(int NumberOfMarkerAdded)
+    {
+        knockOutTimer = timeKO;
+        knockOutCount += NumberOfMarkerAdded;
+
+        if (knockOutCount >= numberToGetKnockOut)
+        {
+            SetKOState(true);
+        }
+
+    }
+
+   public void SetKOState(bool isKO)
+    {
+        if (isKO == false)
+        {
+            knockOutCount = 0;
+            knockOutTimer = 0;
+            boxKnockOut.SetActive(false);
+            isKnockOut = false;
+            _renderer.material = enemyMaterial;
+        }
+        else
+        {
+            isKnockOut = true;
+            boxKnockOut.SetActive(true);
+            knockOutTimer = timeKO;
+            knockOutCount = numberToGetKnockOut;
+            _renderer.material = knockOutMaterial;
+
+        }
+    }
 
     public void Knockback (float KnockPower)
     {
         var knockDirection = transform.position - Player.playerInstance.transform.position;
         
         rbEnemy.AddForce(knockDirection.normalized * KnockPower, ForceMode.Impulse);
-        //rbEnemy.AddForce((rbEnemy.velocity * KnockPower)*-1 , ForceMode.Impulse);
 
     }
 }
