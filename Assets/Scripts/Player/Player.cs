@@ -42,7 +42,8 @@ public class Player : MonoBehaviour
     private bool _canMove = true;
     [SerializeField]
     private bool _canRotate = true;
-    
+    public bool _isCarrying = false;
+
 
 
     [Header("PlayerInfo")]
@@ -51,8 +52,8 @@ public class Player : MonoBehaviour
     public Animator animator;
     public Renderer arms;
 
-    [Header("Attack")]
-    public LayerMask enemyLayer;
+    //[Header("Attack")]
+    //public LayerMask enemyLayer;
     //public float attackResetTimer = 2f;
     //public float eagleTime = 0f;
     //public int attackNum = 0;
@@ -87,6 +88,9 @@ public class Player : MonoBehaviour
     private bool _canDash = true;
     [SerializeField]
     public float dashVelocity = 10f;
+
+    [Header("Carry and Throw")]
+    public float throwPower=10f;
 
     // Start is called before the first frame update
     void Start()
@@ -335,7 +339,7 @@ public class Player : MonoBehaviour
         }
 
         //TOUCHE X : BEAR attaque
-        if (Input.GetKey(KeyCode.Joystick1Button2) && _canNewBearAttack == true)
+        if (Input.GetKey(KeyCode.Joystick1Button2) && _canNewBearAttack == true && _isCarrying == false)
         {
 
             BearIsCharging();
@@ -348,7 +352,7 @@ public class Player : MonoBehaviour
 
         }
 
-        if (Input.GetKeyUp(KeyCode.Joystick1Button2) && _canNewBearAttack == true)
+        if (Input.GetKeyUp(KeyCode.Joystick1Button2) && _canNewBearAttack == true && _isCarrying == false)
         {
             StartCoroutine("BearIsAttacking"); 
             

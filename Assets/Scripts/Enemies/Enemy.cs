@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
     public float timeKO = 5f;
     public float knockOutTimer;
     public bool isKnockOut = false;
-    public GameObject boxKnockOut;
+    public Renderer boxKnockOut;
     public Material knockOutMaterial;
 
     // Start is called before the first frame update
@@ -134,14 +134,14 @@ public class Enemy : MonoBehaviour
         {
             knockOutCount = 0;
             knockOutTimer = 0;
-            boxKnockOut.SetActive(false);
+            boxKnockOut.enabled = false;
             isKnockOut = false;
             _renderer.material = enemyMaterial;
         }
         else
         {
             isKnockOut = true;
-            boxKnockOut.SetActive(true);
+            boxKnockOut.enabled = true;
             knockOutTimer = timeKO;
             knockOutCount = numberToGetKnockOut;
             _renderer.material = knockOutMaterial;

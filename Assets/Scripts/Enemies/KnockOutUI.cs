@@ -27,30 +27,42 @@ public class KnockOutUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemy.knockOutCount == 1)
-        {
-            knock1.enabled = true;
 
-        }
-        else if (enemy.knockOutCount == 2)
+        if (Player.playerInstance._isCarrying == false)
         {
-            knock1.enabled = true;
-            knock2.enabled = true;
+            if (enemy.knockOutCount == 1)
+            {
+                knock1.enabled = true;
 
-        }
-        else if (enemy.knockOutCount == 3)
-        {
-            knock1.enabled = true;
-            knock2.enabled = true;
-            knock3.enabled = true;
+            }
+            else if (enemy.knockOutCount == 2)
+            {
+                knock1.enabled = true;
+                knock2.enabled = true;
 
+            }
+            else if (enemy.knockOutCount == 3)
+            {
+                knock1.enabled = true;
+                knock2.enabled = true;
+                knock3.enabled = true;
+
+            }
+            else if (enemy.knockOutCount == 0)
+            {
+                knock1.enabled = false;
+                knock2.enabled = false;
+                knock3.enabled = false;
+            }
         }
-        else if (enemy.knockOutCount == 0)
+
+        if (Player.playerInstance._isCarrying == true)
         {
             knock1.enabled = false;
             knock2.enabled = false;
             knock3.enabled = false;
         }
+
 
     }
 }
