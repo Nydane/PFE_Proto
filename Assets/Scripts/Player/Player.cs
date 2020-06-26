@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Player : MonoBehaviour
@@ -91,6 +92,9 @@ public class Player : MonoBehaviour
 
     [Header("Carry and Throw")]
     public float throwPower=10f;
+    public GameObject carryDestination;
+    public Enemy pickedUpEnemy;
+
 
     // Start is called before the first frame update
     void Start()
@@ -103,6 +107,36 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // logique pour identifier l'ennemi le plus proche à pick up.
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2) && _isCarrying == false)
+        {
+            if (PickUpDetector.pickUpDetectorList.Count > 0)
+            {
+                float d = Mathf.Infinity;
+                Enemy ClosestEnemy = null;
+
+                foreach (Enemy e in PickUpDetector.pickUpDetectorList)
+                {
+
+                    if (Vector3.Distance(transform.position, e.transform.position) < d && e.isKnockOut)
+                    {
+                        d = Vector3.Distance(transform.position, e.transform.position);
+                        ClosestEnemy = e;
+
+                    }
+                }
+                if (ClosestEnemy != null)
+                {
+                    Grab(ClosestEnemy);
+                }
+
+            }
+        }
+        else if  (Input.GetKeyDown(KeyCode.Joystick1Button2) && _isCarrying)
+        {
+            Throw(pickedUpEnemy);
+
+        }
 
 
 
@@ -779,5 +813,49 @@ public class Player : MonoBehaviour
         _canDash = true;
 
     }
+
+    void Grab(Enemy e)
+    {
+        e.GetComponent<Rigidbody>().isKinematic = true;
+        e.transform.position = carryDestination.transform.position;
+        e.transform.rotation = Quaternion.Euler(0, 0, 90);
+        e.transform.parent = GameObject.Find("CarryPoint").transform;
+        _isCarrying = true;
+        e.GetComponent<Collider>().enabled = false;
+        EnemyDetectorBear.EnemiesDetectedBear.Remove(e);
+        pickedUpEnemy = e;
+    }
+
+    void Throw(Enemy e)
+    {
+        e.GetComponent<Rigidbody>().isKinematic = false;
+        Vector3 direction = (venomArrowPos.position - transform.position); // utilisation du point de lancement des flèches pour donner une direction au lancer
+        e.GetComponent<Rigidbody>().AddForce(direction.normalized * throwPower, ForceMode.Impulse);
+
+        e.transform.position = carryDestination.transform.position;
+        e.transform.rotation = Quaternion.Euler(0, 0, 0);
+        e.transform.parent = GameObject.Find("BadBoBFollow").transform;
+        e.transform.localScale = new Vector3(1, 1.8f, 1);
+        _isCarrying = false;
+        e.GetComponent<Collider>().enabled = true;
+        pickedUpEnemy = null;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy" )
+        {
+
+            //todo identifier un ennemi à pickup
+            Enemy enemy;
+            enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        
+    }
+
 }
 

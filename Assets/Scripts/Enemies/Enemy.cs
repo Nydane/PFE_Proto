@@ -134,14 +134,12 @@ public class Enemy : MonoBehaviour
         {
             knockOutCount = 0;
             knockOutTimer = 0;
-            boxKnockOut.enabled = false;
             isKnockOut = false;
             _renderer.material = enemyMaterial;
         }
         else
         {
             isKnockOut = true;
-            boxKnockOut.enabled = true;
             knockOutTimer = timeKO;
             knockOutCount = numberToGetKnockOut;
             _renderer.material = knockOutMaterial;

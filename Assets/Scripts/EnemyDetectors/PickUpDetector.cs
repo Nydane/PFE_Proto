@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDetectorBear : MonoBehaviour
+public class PickUpDetector : MonoBehaviour
 {
-    public static List<Enemy> EnemiesDetectedBear = new List<Enemy>();
+    public static List<Enemy> pickUpDetectorList = new List<Enemy>();
     public List<Enemy> debugList = new List<Enemy>();
 
 
     private void Update()
     {
-        debugList = EnemiesDetectedBear;
+        debugList = pickUpDetectorList;
     }
     public void OnTriggerEnter(Collider other)
     {
+
         Enemy e = other.GetComponent<Enemy>();
         if (e != null)
         {
-            EnemiesDetectedBear.Add(e);
+            pickUpDetectorList.Add(e);
         }
     }
 
@@ -26,7 +27,11 @@ public class EnemyDetectorBear : MonoBehaviour
         Enemy e = other.GetComponent<Enemy>();
         if (e != null)
         {
-            EnemiesDetectedBear.Remove(e);
+            
+            
+             pickUpDetectorList.Remove(e);
+
+            
         }
     }
 }
