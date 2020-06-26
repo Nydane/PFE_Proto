@@ -138,6 +138,17 @@ public class Player : MonoBehaviour
 
         }
 
+        if (_isCarrying && pickedUpEnemy.isKnockOut == false)
+        {
+            pickedUpEnemy.GetComponent<Rigidbody>().isKinematic = false;
+            pickedUpEnemy.transform.position = carryDestination.transform.position;
+            pickedUpEnemy.transform.rotation = Quaternion.Euler(0, 0, 0);
+            pickedUpEnemy.transform.parent = GameObject.Find("BadBoBFollow").transform;
+            pickedUpEnemy.transform.localScale = new Vector3(1, 1.8f, 1);
+            _isCarrying = false;
+            pickedUpEnemy.GetComponent<Collider>().enabled = true;
+            pickedUpEnemy = null;
+        }
 
 
         // Identification des mouvements
