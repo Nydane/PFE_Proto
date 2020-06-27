@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,6 +71,8 @@ public class Player : MonoBehaviour
     public float bearKnockPower2 = 20f;
     public float bearKnockPower3 = 30f;
     public float bearTimeBetweenAttack = 0.5f;
+    public float timeMoveAfterBearAttack = 0.5f;
+    private float timerCooldownBear;
     public float channelingBearAttack = 0f;
     public Material firstStack;
     public Material secondStack;
@@ -107,6 +110,20 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        // logique pour le CD de l'attaque de l'ours
+        if (_canNewBearAttack == false)
+        {
+            timerCooldownBear += Time.deltaTime;
+            if (timerCooldownBear >= bearTimeBetweenAttack)
+            {
+                _canNewBearAttack = true;
+                channelingBearAttack = 0f;
+            }
+
+        }
+
+
         // logique pour identifier l'ennemi le plus proche à pick up.
         if (Input.GetKeyDown(KeyCode.Joystick1Button2) && _isCarrying == false)
         {
@@ -789,13 +806,16 @@ public class Player : MonoBehaviour
                 }
             }
 
-        _canRotate = true;
-        _canMove = true;
+        
         Debug.Log("BearAttack");
         _canNewBearAttack = false;
-        yield return new WaitForSeconds(bearTimeBetweenAttack);
-        _canNewBearAttack = true;
-        channelingBearAttack = 0f;
+        yield return new WaitForSeconds(timeMoveAfterBearAttack);
+        _canRotate = true;
+        _canMove = true;
+
+
+       // _canNewBearAttack = true;
+        //channelingBearAttack = 0f;
 
     }
 
