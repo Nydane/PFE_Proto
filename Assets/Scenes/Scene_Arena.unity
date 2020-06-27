@@ -1853,10 +1853,10 @@ MonoBehaviour:
   animator: {fileID: 601173551}
   arms: {fileID: 983816615}
   _canNewBearAttack: 1
-  bearKnockPower1: 5
-  bearKnockPower2: 5
-  bearKnockPower3: 5
-  bearTimeBetweenAttack: 2
+  bearKnockPower1: 1
+  bearKnockPower2: 2
+  bearKnockPower3: 3
+  bearTimeBetweenAttack: 0.15
   channelingBearAttack: 0
   firstStack: {fileID: 2100000, guid: 843d9ecb16fc65141b7f54b056131580, type: 2}
   secondStack: {fileID: 2100000, guid: bb1dc786abad4064395affe29f340634, type: 2}

@@ -834,6 +834,7 @@ public class Player : MonoBehaviour
         _isCarrying = true;
         e.GetComponent<Collider>().enabled = false;
         EnemyDetectorBear.EnemiesDetectedBear.Remove(e);
+        PickUpDetector.pickUpDetectorList.Remove(e);
         pickedUpEnemy = e;
     }
 
@@ -849,19 +850,20 @@ public class Player : MonoBehaviour
         e.transform.localScale = new Vector3(1, 1.8f, 1);
         _isCarrying = false;
         e.GetComponent<Collider>().enabled = true;
+        EnemyDetectorBear.EnemiesDetectedBear.Remove(e);
+
         pickedUpEnemy = null;
     }
 
-    private void OnTriggerEnter(Collider other)
+   /* private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Enemy" )
         {
 
-            //todo identifier un ennemi à pickup
             Enemy enemy;
             enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
         }
-    }
+    }*/
 
     private void OnTriggerExit(Collider other)
     {
