@@ -117,6 +117,7 @@ public class Player : MonoBehaviour
             timerCooldownBear += Time.deltaTime;
             if (timerCooldownBear >= bearTimeBetweenAttack)
             {
+                timerCooldownBear = 0f;
                 _canNewBearAttack = true;
                 channelingBearAttack = 0f;
             }

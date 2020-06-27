@@ -3568,7 +3568,7 @@ MonoBehaviour:
   bearKnockPower1: 3
   bearKnockPower2: 3
   bearKnockPower3: 3
-  bearTimeBetweenAttack: 0.25
+  bearTimeBetweenAttack: 2
   timeMoveAfterBearAttack: 0.2
   channelingBearAttack: 0
   firstStack: {fileID: 2100000, guid: 843d9ecb16fc65141b7f54b056131580, type: 2}
