@@ -18,7 +18,7 @@ public class EnemyFollowPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemy.isParalyzed == false && enemy.isKnockOut == false)
+        if (enemy.isParalyzed == false && enemy.isKnockOut == false && enemy.isGettingAttacked ==false)
  
         {
             Vector3 moveDirection = Player.playerInstance.transform.position - transform.position;

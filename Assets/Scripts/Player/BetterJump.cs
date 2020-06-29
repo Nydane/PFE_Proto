@@ -115,7 +115,7 @@ public class BetterJump : MonoBehaviour
             isJumping = true;
 
         }
-        else if (Input.GetKeyDown(KeyCode.JoystickButton0) && (!isJumping || CheckGroundStatus()))
+        else if (Input.GetKeyDown(KeyCode.JoystickButton0) && (!isJumping || CheckGroundStatus()) && Player.playerInstance.playerDead == false)
         {
 
 

@@ -39,6 +39,15 @@ public class Enemy : MonoBehaviour
     public Renderer boxKnockOut;
     public Material knockOutMaterial;
 
+    [Header("Getting Attacked")]
+    public bool isGettingAttacked = false;
+    public float isGettingAttackedTimer;
+
+    [Header("Getting Attacked")]
+    public int doingDamage = 10;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,6 +85,14 @@ public class Enemy : MonoBehaviour
 
     }
 
+    public IEnumerator IsGettingAttackedForAurelien()
+    {
+        isGettingAttacked = true;
+        yield return new WaitForSeconds(isGettingAttackedTimer);
+        isGettingAttacked = false;
+
+    }
+
     public void TakeDamamge (int Damage)
 
     {
@@ -93,6 +110,12 @@ public class Enemy : MonoBehaviour
             else Die();
         }
     }
+
+    /*public IEnumerator DoDamage()
+    {
+        yield return new WaitForSeconds(1);
+        Player.playerInstance.DamageTaken(doingDamage);
+    }*/
 
     public void Die()
     {

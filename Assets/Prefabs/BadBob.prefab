@@ -141,6 +141,9 @@ MonoBehaviour:
   isKnockOut: 0
   boxKnockOut: {fileID: 0}
   knockOutMaterial: {fileID: 2100000, guid: 185973ff08d1d2541a548bfff2fc71b0, type: 2}
+  isGettingAttacked: 0
+  isGettingAttackedTimer: 0.5
+  doingDamage: 10
 --- !u!114 &1042556450972685118
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,12 +4,32 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 
 public class Player : MonoBehaviour
 {
     public static Player playerInstance;
-        
+
+    [Header("Health")]
+    public int health;
+    public int maxHealth = 100;
+    public HealthBar healthBar;
+    public float forwardRayCastLength = 2f;
+
+    [Header("Immune")]
+    public float cooldownImmunityTimer = 0f;
+    public float immunityTimer = 1f;
+    public bool isImmune = false;
+
+    [Header("Damage")]
+    public bool tookDamage = false;
+
+    [Header("Death")]
+    public bool playerDead;
+    public GameObject endImage;
+
     [Header("Mouvements")]
     [SerializeField]
     public float _playerSpeed = 5f;
@@ -99,17 +119,40 @@ public class Player : MonoBehaviour
     public Enemy pickedUpEnemy;
 
 
+
+
     // Start is called before the first frame update
     void Start()
     {
         rb = transform.GetComponent<Rigidbody>();
         playerInstance = this;
+        health = maxHealth;
         //basicCollider = GetComponentInChildren<EnemyDetectorBasic>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        
+        // logique pour immune après avoir pris des dégâts
+
+        if (tookDamage)
+        {
+            Immunity(immunityTimer);
+
+        }
+
+        //Death logique
+        if (playerDead == true && Input.GetKeyDown(KeyCode.JoystickButton0))
+        {
+
+            Time.timeScale = 1;
+            SceneManager.LoadScene("Scene_Arena");
+            EnemyDetectorBear.EnemiesDetectedBear.Clear();
+            PickUpDetector.pickUpDetectorList.Clear();
+
+        }
 
         // logique pour le CD de l'attaque de l'ours
         if (_canNewBearAttack == false)
@@ -794,18 +837,23 @@ public class Player : MonoBehaviour
                 {
                     enemy.Knockback(bearKnockPower1);
                     enemy.KnockOut(1);
+                    StartCoroutine(enemy.IsGettingAttackedForAurelien());
                 }
                 else if (channelingBearAttack >= 1 && channelingBearAttack < 2)
                 {
                     enemy.Knockback(bearKnockPower2);
                     enemy.KnockOut(2);
-                }
-                else if (channelingBearAttack >= 2 && channelingBearAttack <= 5)
+                    StartCoroutine(enemy.IsGettingAttackedForAurelien());
+
+            }
+            else if (channelingBearAttack >= 2 && channelingBearAttack <= 5)
                 {
                     enemy.Knockback(bearKnockPower3);
                     enemy.KnockOut(3);
-                }
+                    StartCoroutine(enemy.IsGettingAttackedForAurelien());
+
             }
+        }
 
         
         Debug.Log("BearAttack");
@@ -876,19 +924,53 @@ public class Player : MonoBehaviour
         pickedUpEnemy = null;
     }
 
-   /* private void OnTriggerEnter(Collider other)
+    public void DamageTaken (int damage)
     {
-        if (other.tag == "Enemy" )
+        health -= damage;
+        healthBar.SetHealth(health);
+        tookDamage = true;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        endImage.SetActive(true);
+
+        Time.timeScale = 0;
+        playerDead = true;
+        //this.enabled = false;
+    }
+
+    void Immunity (float immunityTimer)
+    {
+        isImmune = true;
+        cooldownImmunityTimer += Time.deltaTime;
+        if (cooldownImmunityTimer >= immunityTimer)
+        {
+            cooldownImmunityTimer = 0;
+            isImmune = false;
+            tookDamage = false;
+
+        }
+
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Enemy")
         {
 
-            Enemy enemy;
-            enemy = other.gameObject.transform.parent.GetComponent<Enemy>();
-        }
-    }*/
+            if (collision.transform.GetComponent<Enemy>().isKnockOut == false && !isImmune)
+            {
+                DamageTaken(10);
 
-    private void OnTriggerExit(Collider other)
-    {
-        
+            }
+        }
     }
 
 }
